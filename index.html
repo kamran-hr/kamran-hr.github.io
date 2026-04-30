@@ -726,5 +726,353 @@
             });
         });
     </script>
+    <!-- AskKamran AI Assistant -->
+<div id="AskKamran-container" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    
+    <!-- Chat Widget -->
+    <div id="AskKamran-chat" class="hidden mb-4 w-80 md:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden transform transition-all duration-300 origin-bottom-right scale-95 opacity-0">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-slate-800 to-blue-900 p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold text-sm">AskKamran</h4>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                        <span class="text-xs text-blue-200">Online</span>
+                    </div>
+                </div>
+            </div>
+            <button onclick="toggleAskKamran()" class="text-white/70 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Messages Area -->
+        <div id="AskKamran-messages" class="h-80 overflow-y-auto p-4 space-y-4 bg-slate-50">
+            <!-- Greeting message (auto-populated) -->
+        </div>
+
+        <!-- Input Area -->
+        <div class="p-3 bg-white border-t border-slate-100">
+            <div class="flex gap-2">
+                <input 
+                    type="text" 
+                    id="AskKamran-input" 
+                    placeholder="Ask me anything about Kamran..." 
+                    class="flex-1 px-4 py-2.5 bg-slate-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                    onkeypress="if(event.key==='Enter') sendAskKamranMessage()"
+                >
+                <button onclick="sendAskKamranMessage()" class="w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-colors shadow-lg shadow-blue-500/30">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="mt-2 flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+                <button onclick="sendQuickQuestion('What is Kamran\'s current role?')" class="whitespace-nowrap px-3 py-1 bg-slate-100 hover:bg-blue-50 text-xs text-slate-600 hover:text-blue-600 rounded-full transition-colors">Current role?</button>
+                <button onclick="sendQuickQuestion('What are his key achievements?')" class="whitespace-nowrap px-3 py-1 bg-slate-100 hover:bg-blue-50 text-xs text-slate-600 hover:text-blue-600 rounded-full transition-colors">Key achievements?</button>
+                <button onclick="sendQuickQuestion('Is he open to relocation?')" class="whitespace-nowrap px-3 py-1 bg-slate-100 hover:bg-blue-50 text-xs text-slate-600 hover:text-blue-600 rounded-full transition-colors">Relocation?</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toggle Button -->
+    <button id="AskKamran-toggle" onclick="toggleAskKamran()" class="group w-14 h-14 bg-gradient-to-br from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full shadow-2xl shadow-blue-500/40 flex items-center justify-center transition-all transform hover:scale-110 hover:rotate-3">
+        <svg id="AskKamran-icon" class="w-7 h-7 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+        </svg>
+    </button>
+</div>
+
+<style>
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    @keyframes messageSlideIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .message-anim { animation: messageSlideIn 0.3s ease-out forwards; }
+    
+    @keyframes typingBounce {
+        0%, 60%, 100% { transform: translateY(0); }
+        30% { transform: translateY(-4px); }
+    }
+    .typing-dot { animation: typingBounce 1.4s infinite ease-in-out both; }
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+</style>
+
+<script>
+    // AskKamran Knowledge Base
+    const AskKamranKnowledge = {
+        greetings: [
+            "Hey there! I'm AskKamran, Kamran's AI assistant. While you browse his profile, feel free to ask me anything — from his experience with Emiratisation strategy to his HR tech implementations. What would you like to know?",
+            "Hello! AskKamran here. Kamran is currently leading HR for a 600+ store healthcare group. Ask me about his achievements, skills, or whether he'd be a fit for your organization!",
+            "Hi! I'm AskKamran. Looking at Kamran's impressive track record? I can tell you about his AED 7.2M cost savings, his 105% Emiratisation compliance, or anything else. Fire away!"
+        ],
+        
+        responses: {
+            // Current Role
+            "current": "Kamran is currently **Senior Manager HR at Life Healthcare Group** in Dubai (Jul 2025 – Present). He leads HR strategy for 600+ stores (5,000–10,000 employees), reports directly to the Chairman, and manages a team of 18 HR professionals across HRBP, OD, TA, C&B, HR Technology, Analytics, and Shared Services.",
+            
+            "role": "Kamran is currently **Senior Manager HR at Life Healthcare Group** in Dubai (Jul 2025 – Present). He leads HR strategy for 600+ stores (5,000–10,000 employees), reports directly to the Chairman, and manages a team of 18 HR professionals across HRBP, OD, TA, C&B, HR Technology, Analytics, and Shared Services.",
+            
+            "job": "Kamran is currently **Senior Manager HR at Life Healthcare Group** in Dubai (Jul 2025 – Present). He leads HR strategy for 600+ stores (5,000–10,000 employees), reports directly to the Chairman, and manages a team of 18 HR professionals across HRBP, OD, TA, C&B, HR Technology, Analytics, and Shared Services.",
+            
+            // Experience
+            "experience": "Kamran has **13+ years** of progressive HR leadership across:\n\n• **Life Healthcare Group** – Senior Manager HR (2025–Present)\n• **Home Centre, Landmark Group** – Senior Manager HR (2023–2025)\n• **Noon** – Senior Manager, People Experience (2022–2023)\n• **Amazon** – Site HR Lead / HRBP (2016–2019 & 2020–2022)\n• **Acko General Insurance** – Deputy GM HR (2019–2020)\n• **Coal India Limited** – Assistant Manager HR (2013–2016)\n\nSectors: Healthcare, Retail, E-commerce, Insurance, Technology, Mining.",
+            
+            "work": "Kamran has **13+ years** of progressive HR leadership across:\n\n• **Life Healthcare Group** – Senior Manager HR (2025–Present)\n• **Home Centre, Landmark Group** – Senior Manager HR (2023–2025)\n• **Noon** – Senior Manager, People Experience (2022–2023)\n• **Amazon** – Site HR Lead / HRBP (2016–2019 & 2020–2022)\n• **Acko General Insurance** – Deputy GM HR (2019–2020)\n• **Coal India Limited** – Assistant Manager HR (2013–2016)\n\nSectors: Healthcare, Retail, E-commerce, Insurance, Technology, Mining.",
+            
+            // Achievements
+            "achievement": "Here are Kamran's **top achievements**:\n\n💰 **AED 7.2M** annualized cost savings via automated pharmacist deployment\n📉 Reduced attrition from **35% to 10%** within 8 months\n🏆 **105% Emiratisation** compliance at Life Healthcare\n🌍 **100% Emiratisation** compliance at Home Centre (Landmark Group)\n⚡ **43% SLA improvement** via Darwinbox HRMS at Noon\n🤖 **25% reduction** in manual HR intervention\n📊 Piloted Amazon's Adaptive Labor Model (**7.5% cost reduction**, adopted globally)\n🎯 **20% reduction** in time-to-hire at Landmark Group",
+            
+            "achievements": "Here are Kamran's **top achievements**:\n\n💰 **AED 7.2M** annualized cost savings via automated pharmacist deployment\n📉 Reduced attrition from **35% to 10%** within 8 months\n🏆 **105% Emiratisation** compliance at Life Healthcare\n🌍 **100% Emiratisation** compliance at Home Centre (Landmark Group)\n⚡ **43% SLA improvement** via Darwinbox HRMS at Noon\n🤖 **25% reduction** in manual HR intervention\n📊 Piloted Amazon's Adaptive Labor Model (**7.5% cost reduction**, adopted globally)\n🎯 **20% reduction** in time-to-hire at Landmark Group",
+            
+            "accomplishments": "Here are Kamran's **top achievements**:\n\n💰 **AED 7.2M** annualized cost savings via automated pharmacist deployment\n📉 Reduced attrition from **35% to 10%** within 8 months\n🏆 **105% Emiratisation** compliance at Life Healthcare\n🌍 **100% Emiratisation** compliance at Home Centre (Landmark Group)\n⚡ **43% SLA improvement** via Darwinbox HRMS at Noon\n🤖 **25% reduction** in manual HR intervention\n📊 Piloted Amazon's Adaptive Labor Model (**7.5% cost reduction**, adopted globally)\n🎯 **20% reduction** in time-to-hire at Landmark Group",
+            
+            // Skills
+            "skill": "Kamran's **core competencies** include:\n\n• HR Strategy & Business Partnering (CXO/Board level)\n• **Emiratisation & Nationalization** (UAE Vision 2031)\n• Workforce Planning & Cost Optimization\n• Talent Management & Succession Planning\n• Performance Management Systems\n• Organizational Development & Design\n• **HR Analytics & Power BI**\n• Total Rewards & Compensation (C&B)\n• **HR Technology** (Darwinbox, BambooHR, HRMS implementation)\n• Change Management & Culture Transformation\n• **UAE Labour Law & MOHRE Compliance**\n• HR Shared Services & Operations\n• Employer Branding & Talent Acquisition",
+            
+            "skills": "Kamran's **core competencies** include:\n\n• HR Strategy & Business Partnering (CXO/Board level)\n• **Emiratisation & Nationalization** (UAE Vision 2031)\n• Workforce Planning & Cost Optimization\n• Talent Management & Succession Planning\n• Performance Management Systems\n• Organizational Development & Design\n• **HR Analytics & Power BI**\n• Total Rewards & Compensation (C&B)\n• **HR Technology** (Darwinbox, BambooHR, HRMS implementation)\n• Change Management & Culture Transformation\n• **UAE Labour Law & MOHRE Compliance**\n• HR Shared Services & Operations\n• Employer Branding & Talent Acquisition",
+            
+            // Emiratisation
+            "emiratisation": "Kamran is an **Emiratisation specialist**:\n\n• Achieved **105% compliance** at Life Healthcare Group\n• Achieved **100% compliance** at Home Centre (Landmark Group)\n• Designed bespoke **Emirati talent development programs** (classroom + project-based)\n• Reduced Emirati attrition by **9%** through targeted retention\n• Deep expertise in **UAE Vision 2031** alignment and MOHRE regulatory requirements\n• Experience across healthcare, retail, and multi-sector GCC operations",
+            
+            "emiratization": "Kamran is an **Emiratisation specialist**:\n\n• Achieved **105% compliance** at Life Healthcare Group\n• Achieved **100% compliance** at Home Centre (Landmark Group)\n• Designed bespoke **Emirati talent development programs** (classroom + project-based)\n• Reduced Emirati attrition by **9%** through targeted retention\n• Deep expertise in **UAE Vision 2031** alignment and MOHRE regulatory requirements\n• Experience across healthcare, retail, and multi-sector GCC operations",
+            
+            "nationalization": "Kamran is an **Emiratisation specialist**:\n\n• Achieved **105% compliance** at Life Healthcare Group\n• Achieved **100% compliance** at Home Centre (Landmark Group)\n• Designed bespoke **Emirati talent development programs** (classroom + project-based)\n• Reduced Emirati attrition by **9%** through targeted retention\n• Deep expertise in **UAE Vision 2031** alignment and MOHRE regulatory requirements\n• Experience across healthcare, retail, and multi-sector GCC operations",
+            
+            // HR Tech
+            "tech": "Kamran is an **HR Technology expert**:\n\n• Implemented **Darwinbox HRMS** at Noon (7,000+ employees, 5 geographies)\n• Implemented **BambooHR** at Acko General Insurance (3 months)\n• Created **Power BI dashboards** for real-time workforce insights\n• Built automated **pharmacist deployment model** (eliminated ~200 FTEs)\n• Launched **Employee Support Centre** (ticketing platform, +35% response rates)\n• Developed **Digital People Board** at Amazon (real-time feedback)\n• Experience with payroll integration and SLA optimization",
+            
+            "technology": "Kamran is an **HR Technology expert**:\n\n• Implemented **Darwinbox HRMS** at Noon (7,000+ employees, 5 geographies)\n• Implemented **BambooHR** at Acko General Insurance (3 months)\n• Created **Power BI dashboards** for real-time workforce insights\n• Built automated **pharmacist deployment model** (eliminated ~200 FTEs)\n• Launched **Employee Support Centre** (ticketing platform, +35% response rates)\n• Developed **Digital People Board** at Amazon (real-time feedback)\n• Experience with payroll integration and SLA optimization",
+            
+            "hrms": "Kamran is an **HR Technology expert**:\n\n• Implemented **Darwinbox HRMS** at Noon (7,000+ employees, 5 geographies)\n• Implemented **BambooHR** at Acko General Insurance (3 months)\n• Created **Power BI dashboards** for real-time workforce insights\n• Built automated **pharmacist deployment model** (eliminated ~200 FTEs)\n• Launched **Employee Support Centre** (ticketing platform, +35% response rates)\n• Developed **Digital People Board** at Amazon (real-time feedback)\n• Experience with payroll integration and SLA optimization",
+            
+            // Education
+            "education": "Kamran's **education & certifications**:\n\n🎓 **SPHRi** – Senior Professional in Human Resources – International (Jan 2025)\n📊 **PG Diploma** – HR Digital Transformation & Analytics (Sep 2023)\n🎓 **MBA** – Central University of Kashmir (Aug 2012)\n\n**Languages**: English (Professional), Hindi (Native), Urdu (Native)",
+            
+            "certification": "Kamran's **education & certifications**:\n\n🎓 **SPHRi** – Senior Professional in Human Resources – International (Jan 2025)\n📊 **PG Diploma** – HR Digital Transformation & Analytics (Sep 2023)\n🎓 **MBA** – Central University of Kashmir (Aug 2012)\n\n**Languages**: English (Professional), Hindi (Native), Urdu (Native)",
+            
+            "degree": "Kamran's **education & certifications**:\n\n🎓 **SPHRi** – Senior Professional in Human Resources – International (Jan 2025)\n📊 **PG Diploma** – HR Digital Transformation & Analytics (Sep 2023)\n🎓 **MBA** – Central University of Kashmir (Aug 2012)\n\n**Languages**: English (Professional), Hindi (Native), Urdu (Native)",
+            
+            // Contact
+            "contact": "You can reach Kamran at:\n\n📧 **Email**: kkamran.khan99@gmail.com\n📱 **Phone**: +971 54 998 4315\n📍 **Location**: Dubai, UAE\n\nHe's open to strategic HR leadership opportunities in the UAE and GCC region.",
+            
+            "email": "Kamran's email is **kkamran.khan99@gmail.com**\n\nHe's also available at +971 54 998 4315.",
+            
+            "phone": "Kamran's phone number is **+971 54 998 4315**\n\nYou can also email him at kkamran.khan99@gmail.com.",
+            
+            // Availability
+            "available": "Kamran is **currently employed** at Life Healthcare Group, but he is open to exploring **strategic HR leadership opportunities** in the UAE and GCC region.\n\nHis expertise is particularly valuable for organizations looking to:\n• Transform HR functions\n• Achieve Emiratisation compliance\n• Implement HR technology\n• Reduce workforce costs\n• Build high-performance cultures",
+            
+            "availability": "Kamran is **currently employed** at Life Healthcare Group, but he is open to exploring **strategic HR leadership opportunities** in the UAE and GCC region.\n\nHis expertise is particularly valuable for organizations looking to:\n• Transform HR functions\n• Achieve Emiratisation compliance\n• Implement HR technology\n• Reduce workforce costs\n• Build high-performance cultures",
+            
+            "open": "Kamran is **currently employed** at Life Healthcare Group, but he is open to exploring **strategic HR leadership opportunities** in the UAE and GCC region.\n\nHis expertise is particularly valuable for organizations looking to:\n• Transform HR functions\n• Achieve Emiratisation compliance\n• Implement HR technology\n• Reduce workforce costs\n• Build high-performance cultures",
+            
+            "relocation": "Kamran is **based in Dubai, UAE** and is primarily seeking opportunities within the **UAE and GCC region**.\n\nGiven his deep expertise in UAE Labour Law, Emiratisation, and MOHRE compliance, he is most valuable in roles within the UAE market. However, he is open to discussing exceptional opportunities in the wider GCC.",
+            
+            "relocate": "Kamran is **based in Dubai, UAE** and is primarily seeking opportunities within the **UAE and GCC region**.\n\nGiven his deep expertise in UAE Labour Law, Emiratisation, and MOHRE compliance, he is most valuable in roles within the UAE market. However, he is open to discussing exceptional opportunities in the wider GCC.",
+            
+            // Salary
+            "salary": "Kamran's compensation expectations are **competitive** for Senior HR Leadership roles in the UAE market, commensurate with his 13+ years of experience, SPHRi certification, and proven track record of delivering multi-million AED savings.\n\nFor specific details, please contact him directly at kkamran.khan99@gmail.com.",
+            
+            "expectation": "Kamran's compensation expectations are **competitive** for Senior HR Leadership roles in the UAE market, commensurate with his 13+ years of experience, SPHRi certification, and proven track record of delivering multi-million AED savings.\n\nFor specific details, please contact him directly at kkamran.khan99@gmail.com.",
+            
+            // Leadership
+            "leadership": "Kamran is a **CXO and Board-level HR partner** with experience:\n\n• Reporting directly to **Chairman** at Life Healthcare Group\n• Leading **18 HR professionals** across 7 sub-functions\n• Managing **5,000–10,000 employees** across 600+ stores\n• Driving **enterprise talent philosophy** and succession architectures\n• Shaping **organizational design** for future-ready operations\n• Presenting real-time workforce insights to leadership for decision-making",
+            
+            "manage": "Kamran is a **CXO and Board-level HR partner** with experience:\n\n• Reporting directly to **Chairman** at Life Healthcare Group\n• Leading **18 HR professionals** across 7 sub-functions\n• Managing **5,000–10,000 employees** across 600+ stores\n• Driving **enterprise talent philosophy** and succession architectures\n• Shaping **organizational design** for future-ready operations\n• Presenting real-time workforce insights to leadership for decision-making",
+            
+            "team": "Kamran is a **CXO and Board-level HR partner** with experience:\n\n• Reporting directly to **Chairman** at Life Healthcare Group\n• Leading **18 HR professionals** across 7 sub-functions\n• Managing **5,000–10,000 employees** across 600+ stores\n• Driving **enterprise talent philosophy** and succession architectures\n• Shaping **organizational design** for future-ready operations\n• Presenting real-time workforce insights to leadership for decision-making",
+            
+            // Amazon
+            "amazon": "At **Amazon**, Kamran served two roles:\n\n**Site HR Lead (HRBP)** – Jun 2020 to Mar 2022:\n• Piloted **Adaptive Labor Model** (7.5% variable labor cost reduction)\n• Strategy was **adopted across global Amazon operations**\n• Improved engagement scores by **20 BPS**\n• Championed DEI initiatives (+10% diversity)\n• Launched Interactive Success Profiles (+25% career planning discussions)\n\n**HR Business Partner** – Jul 2016 to Mar 2019:\n• Enhanced engagement by **15%** through targeted initiatives\n• Developed **Early Warning System** for attrition risk\n• Reduced executive escalations with innovative strategies",
+            
+            // Why hire
+            "why": "Here's why Kamran stands out:\n\n✅ **Proven ROI** – Delivered AED 7.2M in savings, not just theory\n✅ **Emiratisation Expert** – 105% compliance, UAE Vision 2031 aligned\n✅ **Tech-Savvy** – Darwinbox, BambooHR, Power BI, automation\n✅ **Scale Experience** – 7,000+ employees, 5 geographies, 600+ stores\n✅ **Board-Ready** – Reports to Chairman, CXO partnership experience\n✅ **Data-Driven** – Real-time analytics for leadership decisions\n✅ **Sector Versatile** – Healthcare, Retail, Tech, Insurance, Mining",
+            
+            "hire": "Here's why Kamran stands out:\n\n✅ **Proven ROI** – Delivered AED 7.2M in savings, not just theory\n✅ **Emiratisation Expert** – 105% compliance, UAE Vision 2031 aligned\n✅ **Tech-Savvy** – Darwinbox, BambooHR, Power BI, automation\n✅ **Scale Experience** – 7,000+ employees, 5 geographies, 600+ stores\n✅ **Board-Ready** – Reports to Chairman, CXO partnership experience\n✅ **Data-Driven** – Real-time analytics for leadership decisions\n✅ **Sector Versatile** – Healthcare, Retail, Tech, Insurance, Mining",
+            
+            "best": "Here's why Kamran stands out:\n\n✅ **Proven ROI** – Delivered AED 7.2M in savings, not just theory\n✅ **Emiratisation Expert** – 105% compliance, UAE Vision 2031 aligned\n✅ **Tech-Savvy** – Darwinbox, BambooHR, Power BI, automation\n✅ **Scale Experience** – 7,000+ employees, 5 geographies, 600+ stores\n✅ **Board-Ready** – Reports to Chairman, CXO partnership experience\n✅ **Data-Driven** – Real-time analytics for leadership decisions\n✅ **Sector Versatile** – Healthcare, Retail, Tech, Insurance, Mining",
+            
+            // Default
+            "default": "That's a great question! While I don't have a specific answer for that, I can tell you that Kamran is a **strategic HR leader** with 13+ years of experience in the UAE, GCC, and India.\n\nTry asking me about:\n• His **current role** at Life Healthcare Group\n• His **achievements** (AED 7.2M savings, Emiratisation compliance)\n• His **HR technology** expertise\n• His **availability** for new opportunities\n• **Why hire** him?\n\nOr type **'help'** to see all topics I can assist with!"
+        },
+        
+        helpTopics: "Here are the topics I can help you with:\n\n🏢 **Current Role** – What is Kamran doing now?\n📈 **Achievements** – Key accomplishments and metrics\n💼 **Experience** – Full career history\n🎯 **Skills** – Core competencies and expertise\n🇦🇪 **Emiratisation** – UAE nationalization expertise\n💻 **HR Technology** – HRMS, analytics, digital transformation\n🎓 **Education** – Certifications and degrees\n📞 **Contact** – How to reach Kamran\n✅ **Availability** – Is he open to opportunities?\n🌍 **Relocation** – Willingness to move\n💰 **Salary** – Compensation expectations\n👥 **Leadership** – Team management experience\n📦 **Amazon** – His work at Amazon\n⭐ **Why Hire** – What makes him unique?\n\nJust ask naturally — I understand context!"
+    };
+
+    let AskKamranOpen = false;
+    let hasGreeted = false;
+
+    function toggleAskKamran() {
+        const chat = document.getElementById('AskKamran-chat');
+        const icon = document.getElementById('AskKamran-icon');
+        
+        AskKamranOpen = !AskKamranOpen;
+        
+        if (AskKamranOpen) {
+            chat.classList.remove('hidden');
+            // Small delay to allow display:block to apply before opacity transition
+            setTimeout(() => {
+                chat.classList.remove('scale-95', 'opacity-0');
+                chat.classList.add('scale-100', 'opacity-100');
+            }, 10);
+            icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>';
+            
+            if (!hasGreeted) {
+                setTimeout(() => {
+                    const greeting = AskKamranKnowledge.greetings[Math.floor(Math.random() * AskKamranKnowledge.greetings.length)];
+                    addAskKamranMessage(greeting, 'bot');
+                    hasGreeted = true;
+                }, 600);
+            }
+        } else {
+            chat.classList.remove('scale-100', 'opacity-100');
+            chat.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                chat.classList.add('hidden');
+            }, 300);
+            icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>';
+        }
+    }
+
+    function addAskKamranMessage(text, sender) {
+        const container = document.getElementById('AskKamran-messages');
+        const div = document.createElement('div');
+        div.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-start'} message-anim`;
+        
+        const isUser = sender === 'user';
+        const bgColor = isUser ? 'bg-blue-600 text-white' : 'bg-white text-slate-700 border border-slate-200';
+        const avatar = isUser ? '' : `
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center mr-2 flex-shrink-0">
+                <span class="text-white text-xs font-bold">K</span>
+            </div>
+        `;
+        
+        // Convert markdown-style bold to HTML
+        const formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+        
+        div.innerHTML = `
+            ${avatar}
+            <div class="${bgColor} rounded-2xl px-4 py-3 max-w-[80%] text-sm leading-relaxed shadow-sm">
+                ${formattedText}
+            </div>
+        `;
+        
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function showTypingIndicator() {
+        const container = document.getElementById('AskKamran-messages');
+        const div = document.createElement('div');
+        div.id = 'typing-indicator';
+        div.className = 'flex justify-start message-anim';
+        div.innerHTML = `
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center mr-2 flex-shrink-0">
+                <span class="text-white text-xs font-bold">K</span>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-2xl px-4 py-3 shadow-sm">
+                <div class="flex gap-1">
+                    <div class="w-2 h-2 bg-slate-400 rounded-full typing-dot"></div>
+                    <div class="w-2 h-2 bg-slate-400 rounded-full typing-dot"></div>
+                    <div class="w-2 h-2 bg-slate-400 rounded-full typing-dot"></div>
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function removeTypingIndicator() {
+        const indicator = document.getElementById('typing-indicator');
+        if (indicator) indicator.remove();
+    }
+
+    function findBestResponse(input) {
+        const lower = input.toLowerCase();
+        
+        // Check for help
+        if (lower.includes('help') || lower.includes('what can you') || lower.includes('topics')) {
+            return AskKamranKnowledge.helpTopics;
+        }
+        
+        // Check all response keys
+        for (const [key, response] of Object.entries(AskKamranKnowledge.responses)) {
+            if (lower.includes(key)) {
+                return response;
+            }
+        }
+        
+        // Check for partial matches
+        const keywords = {
+            'current': ['now', 'today', 'present', 'life healthcare'],
+            'achievement': ['save', 'saving', 'cost', 'attrition', 'compliance', 'reduce', 'improvement', 'metric', 'kpi', 'result'],
+            'experience': ['career', 'history', 'worked', 'company', 'previous', 'past', 'background'],
+            'skill': ['competency', 'expertise', 'capable', 'know', 'can do', 'strength'],
+            'emiratisation': ['emirati', 'nationalization', 'uae vision', 'mohre', 'qatari', 'saudi'],
+            'tech': ['system', 'software', 'digital', 'automation', 'power bi', 'darwinbox', 'bamboo', 'hrms'],
+            'education': ['study', 'university', 'certified', 'sphri', 'mba', 'diploma', 'qualification'],
+            'contact': ['reach', 'connect', 'speak', 'talk', 'message', 'linkedin'],
+            'available': ['looking', 'searching', 'job hunt', 'interested', 'opportunity', 'hire'],
+            'relocation': ['move', 'transfer', 'abroad', 'gcc', 'ksa', 'bahrain', 'kuwait', 'oman'],
+            'salary': ['pay', 'compensation', 'package', 'expectation', 'remuneration', 'budget'],
+            'leadership': ['lead', 'manager', 'team size', 'report', 'subordinate', 'headcount'],
+            'amazon': ['fulfillment', 'adaptive labor', 'jeff bezos', 'e-commerce giant'],
+            'why': ['unique', 'different', 'special', 'stand out', 'value', 'asset']
+        };
+        
+        for (const [key, synonyms] of Object.entries(keywords)) {
+            if (synonyms.some(s => lower.includes(s))) {
+                return AskKamranKnowledge.responses[key];
+            }
+        }
+        
+        return AskKamranKnowledge.responses.default;
+    }
+
+    function sendAskKamranMessage() {
+        const input = document.getElementById('AskKamran-input');
+        const text = input.value.trim();
+        if (!text) return;
+        
+        addAskKamranMessage(text, 'user');
+        input.value = '';
+        
+        showTypingIndicator();
+        
+        // Simulate thinking time (1-2 seconds)
+        const delay = 800 + Math.random() * 800;
+        setTimeout(() => {
+            removeTypingIndicator();
+            const response = findBestResponse(text);
+            addAskKamranMessage(response, 'bot');
+        }, delay);
+    }
+
+    function sendQuickQuestion(question) {
+        document.getElementById('AskKamran-input').value = question;
+        sendAskKamranMessage();
+    }
+
+    // Auto-open after 2 seconds
+    setTimeout(() => {
+        if (!AskKamranOpen) {
+            toggleAskKamran();
+        }
+    }, 2000);
+</script>
 </body>
 </html>

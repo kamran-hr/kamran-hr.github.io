@@ -71,6 +71,7 @@
             transform: scale(1.05);
         }
     </style>
+<base target="_blank">
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased">
 
@@ -726,217 +727,343 @@
             });
         });
     </script>
-    <!-- AskKamran AI Assistant -->
-<div id="AskKamran-container" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-    
+<!-- AskKamran AI Assistant -->
+<div id="askkamran-container" class="fixed bottom-6 right-6 z-50 flex flex-col items-end font-sans">
+
     <!-- Chat Widget -->
-    <div id="AskKamran-chat" class="hidden mb-4 w-80 md:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden transform transition-all duration-300 origin-bottom-right scale-95 opacity-0">
-        
+    <div id="askkamran-chat" class="hidden mb-4 w-[22rem] md:w-[28rem] bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden transform transition-all duration-300 origin-bottom-right scale-95 opacity-0">
+
         <!-- Header -->
-        <div class="bg-gradient-to-r from-slate-800 to-blue-900 p-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                    </svg>
+        <div class="bg-gradient-to-r from-slate-800 via-blue-900 to-slate-800 p-4 flex items-center justify-between relative overflow-hidden">
+            <div class="absolute inset-0 opacity-50"></div>
+            <div class="flex items-center gap-3 relative z-10">
+                <div class="relative">
+                    <div class="w-11 h-11 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/20">
+                        <span class="text-white text-lg font-bold">K</span>
+                    </div>
+                    <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-400 border-2 border-slate-800 rounded-full animate-pulse"></span>
                 </div>
                 <div>
-                    <h4 class="text-white font-bold text-sm">AskKamran</h4>
+                    <h4 class="text-white font-bold text-sm tracking-wide">AskKamran</h4>
                     <div class="flex items-center gap-1.5">
-                        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                        <span class="text-xs text-blue-200">Online</span>
+                        <span class="text-[10px] text-blue-200 font-medium">AI Assistant — here to help</span>
                     </div>
                 </div>
             </div>
-            <button onclick="toggleAskKamran()" class="text-white/70 hover:text-white transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-            </button>
+            <div class="flex items-center gap-2 relative z-10">
+                <button onclick="minimizeChat()" class="text-white/60 hover:text-white transition-colors p-1" title="Minimize">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <button onclick="closeChat()" class="text-white/60 hover:text-white transition-colors p-1" title="Close">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
         </div>
 
         <!-- Messages Area -->
-        <div id="AskKamran-messages" class="h-80 overflow-y-auto p-4 space-y-4 bg-slate-50">
-            <!-- Greeting message (auto-populated) -->
+        <div id="askkamran-messages" class="h-[22rem] md:h-[26rem] overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-slate-50 to-white">
+            <!-- Messages injected here -->
         </div>
 
         <!-- Input Area -->
         <div class="p-3 bg-white border-t border-slate-100">
-            <div class="flex gap-2">
+            <div class="flex gap-2 mb-2">
                 <input 
                     type="text" 
-                    id="AskKamran-input" 
-                    placeholder="Ask me anything about Kamran..." 
-                    class="flex-1 px-4 py-2.5 bg-slate-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                    id="askkamran-input" 
+                    placeholder="Ask me anything..." 
+                    class="flex-1 px-4 py-2.5 bg-slate-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all placeholder:text-slate-400"
                     onkeypress="if(event.key==='Enter') sendAskKamranMessage()"
+                    autocomplete="off"
                 >
-                <button onclick="sendAskKamranMessage()" class="w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-colors shadow-lg shadow-blue-500/30">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-                    </svg>
+                <button onclick="sendAskKamranMessage()" class="w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-xl flex items-center justify-center transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:scale-105 active:scale-95">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
                 </button>
             </div>
-            <div class="mt-2 flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-                <button onclick="sendQuickQuestion('What is Kamran\'s current role?')" class="whitespace-nowrap px-3 py-1 bg-slate-100 hover:bg-blue-50 text-xs text-slate-600 hover:text-blue-600 rounded-full transition-colors">Current role?</button>
-                <button onclick="sendQuickQuestion('What are his key achievements?')" class="whitespace-nowrap px-3 py-1 bg-slate-100 hover:bg-blue-50 text-xs text-slate-600 hover:text-blue-600 rounded-full transition-colors">Key achievements?</button>
-                <button onclick="sendQuickQuestion('Is he open to relocation?')" class="whitespace-nowrap px-3 py-1 bg-slate-100 hover:bg-blue-50 text-xs text-slate-600 hover:text-blue-600 rounded-full transition-colors">Relocation?</button>
+            <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide" id="quick-replies">
+                <button onclick="sendQuickQuestion('Tell me about yourself')" class="whitespace-nowrap px-3 py-1.5 bg-slate-100 hover:bg-blue-50 text-xs text-slate-600 hover:text-blue-700 rounded-lg transition-all border border-transparent hover:border-blue-200">Tell me about yourself</button>
+                <button onclick="sendQuickQuestion('What are you looking for next?')" class="whitespace-nowrap px-3 py-1.5 bg-slate-100 hover:bg-blue-50 text-xs text-slate-600 hover:text-blue-700 rounded-lg transition-all border border-transparent hover:border-blue-200">What next?</button>
+                <button onclick="sendQuickQuestion('Why the short stints?')" class="whitespace-nowrap px-3 py-1.5 bg-slate-100 hover:bg-blue-50 text-xs text-slate-600 hover:text-blue-700 rounded-lg transition-all border border-transparent hover:border-blue-200">Short stints?</button>
+                <button onclick="sendQuickQuestion('What is your notice period?')" class="whitespace-nowrap px-3 py-1.5 bg-slate-100 hover:bg-blue-50 text-xs text-slate-600 hover:text-blue-700 rounded-lg transition-all border border-transparent hover:border-blue-200">Availability?</button>
             </div>
         </div>
     </div>
 
     <!-- Toggle Button -->
-    <button id="AskKamran-toggle" onclick="toggleAskKamran()" class="group w-14 h-14 bg-gradient-to-br from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full shadow-2xl shadow-blue-500/40 flex items-center justify-center transition-all transform hover:scale-110 hover:rotate-3">
-        <svg id="AskKamran-icon" class="w-7 h-7 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <button id="askkamran-toggle" onclick="toggleAskKamran()" class="group relative w-14 h-14 bg-gradient-to-br from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full shadow-2xl shadow-blue-500/30 flex items-center justify-center transition-all transform hover:scale-110 hover:rotate-3 active:scale-95">
+        <div class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-bounce" id="notification-dot"></div>
+        <svg id="askkamran-icon" class="w-7 h-7 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
         </svg>
+        <span class="absolute right-16 bg-slate-800 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Chat with AskKamran</span>
     </button>
 </div>
 
 <style>
     .scrollbar-hide::-webkit-scrollbar { display: none; }
     .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-    
+
     @keyframes messageSlideIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
+        from { opacity: 0; transform: translateY(12px) scale(0.96); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
     }
-    .message-anim { animation: messageSlideIn 0.3s ease-out forwards; }
-    
+    .message-anim { animation: messageSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
     @keyframes typingBounce {
         0%, 60%, 100% { transform: translateY(0); }
-        30% { transform: translateY(-4px); }
+        30% { transform: translateY(-5px); }
     }
     .typing-dot { animation: typingBounce 1.4s infinite ease-in-out both; }
     .typing-dot:nth-child(1) { animation-delay: -0.32s; }
     .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .fade-in { animation: fadeIn 0.3s ease-out forwards; }
 </style>
 
 <script>
-    // AskKamran Knowledge Base
-    const AskKamranKnowledge = {
+    // ===================== ASKKAMRAN KNOWLEDGE REPOSITORY =====================
+    const askKamranRepo = {
+
         greetings: [
-            "Hey there! I'm AskKamran, Kamran's AI assistant. While you browse his profile, feel free to ask me anything — from his experience with Emiratisation strategy to his HR tech implementations. What would you like to know?",
-            "Hello! AskKamran here. Kamran is currently leading HR for a 600+ store healthcare group. Ask me about his achievements, skills, or whether he'd be a fit for your organization!",
-            "Hi! I'm AskKamran. Looking at Kamran's impressive track record? I can tell you about his AED 7.2M cost savings, his 105% Emiratisation compliance, or anything else. Fire away!"
+            "Hey there! I'm AskKamran — think of me as the next best thing to Kamran himself (though I can't match his coffee recommendations). While you're browsing his profile, feel free to ask me anything — his achievements, what he's looking for next, or even why he has a couple of shorter stints on his CV. I'm an open book!",
+            "Hello! AskKamran here. Kamran is currently leading HR for a 600+ store healthcare group in Dubai, but he's actively exploring his next strategic leadership move. Want to know about that AED 7.2M cost saving story? Or perhaps why he'd be a great fit for your organization? Just ask — no question is off-limits!",
+            "Hi there! I'm AskKamran, Kamran's AI wingman. He's given me the inside scoop on everything — from his Emiratisation strategies to his failed experiments (yes, he has those too, and he owns them). What would you like to know?",
+            "Welcome! AskKamran at your service. Kamran is a numbers guy who tells stories, or a storyteller who backs everything with numbers — depends on how you ask the question. Right now he's looking for a strategic HR leadership role where he can partner with the business, not just run operations. Curious about anything specific?"
         ],
-        
+
         responses: {
-            // Current Role
-            "current": "Kamran is currently **Senior Manager HR at Life Healthcare Group** in Dubai (Jul 2025 – Present). He leads HR strategy for 600+ stores (5,000–10,000 employees), reports directly to the Chairman, and manages a team of 18 HR professionals across HRBP, OD, TA, C&B, HR Technology, Analytics, and Shared Services.",
-            
-            "role": "Kamran is currently **Senior Manager HR at Life Healthcare Group** in Dubai (Jul 2025 – Present). He leads HR strategy for 600+ stores (5,000–10,000 employees), reports directly to the Chairman, and manages a team of 18 HR professionals across HRBP, OD, TA, C&B, HR Technology, Analytics, and Shared Services.",
-            
-            "job": "Kamran is currently **Senior Manager HR at Life Healthcare Group** in Dubai (Jul 2025 – Present). He leads HR strategy for 600+ stores (5,000–10,000 employees), reports directly to the Chairman, and manages a team of 18 HR professionals across HRBP, OD, TA, C&B, HR Technology, Analytics, and Shared Services.",
-            
-            // Experience
-            "experience": "Kamran has **13+ years** of progressive HR leadership across:\n\n• **Life Healthcare Group** – Senior Manager HR (2025–Present)\n• **Home Centre, Landmark Group** – Senior Manager HR (2023–2025)\n• **Noon** – Senior Manager, People Experience (2022–2023)\n• **Amazon** – Site HR Lead / HRBP (2016–2019 & 2020–2022)\n• **Acko General Insurance** – Deputy GM HR (2019–2020)\n• **Coal India Limited** – Assistant Manager HR (2013–2016)\n\nSectors: Healthcare, Retail, E-commerce, Insurance, Technology, Mining.",
-            
-            "work": "Kamran has **13+ years** of progressive HR leadership across:\n\n• **Life Healthcare Group** – Senior Manager HR (2025–Present)\n• **Home Centre, Landmark Group** – Senior Manager HR (2023–2025)\n• **Noon** – Senior Manager, People Experience (2022–2023)\n• **Amazon** – Site HR Lead / HRBP (2016–2019 & 2020–2022)\n• **Acko General Insurance** – Deputy GM HR (2019–2020)\n• **Coal India Limited** – Assistant Manager HR (2013–2016)\n\nSectors: Healthcare, Retail, E-commerce, Insurance, Technology, Mining.",
-            
-            // Achievements
-            "achievement": "Here are Kamran's **top achievements**:\n\n💰 **AED 7.2M** annualized cost savings via automated pharmacist deployment\n📉 Reduced attrition from **35% to 10%** within 8 months\n🏆 **105% Emiratisation** compliance at Life Healthcare\n🌍 **100% Emiratisation** compliance at Home Centre (Landmark Group)\n⚡ **43% SLA improvement** via Darwinbox HRMS at Noon\n🤖 **25% reduction** in manual HR intervention\n📊 Piloted Amazon's Adaptive Labor Model (**7.5% cost reduction**, adopted globally)\n🎯 **20% reduction** in time-to-hire at Landmark Group",
-            
-            "achievements": "Here are Kamran's **top achievements**:\n\n💰 **AED 7.2M** annualized cost savings via automated pharmacist deployment\n📉 Reduced attrition from **35% to 10%** within 8 months\n🏆 **105% Emiratisation** compliance at Life Healthcare\n🌍 **100% Emiratisation** compliance at Home Centre (Landmark Group)\n⚡ **43% SLA improvement** via Darwinbox HRMS at Noon\n🤖 **25% reduction** in manual HR intervention\n📊 Piloted Amazon's Adaptive Labor Model (**7.5% cost reduction**, adopted globally)\n🎯 **20% reduction** in time-to-hire at Landmark Group",
-            
-            "accomplishments": "Here are Kamran's **top achievements**:\n\n💰 **AED 7.2M** annualized cost savings via automated pharmacist deployment\n📉 Reduced attrition from **35% to 10%** within 8 months\n🏆 **105% Emiratisation** compliance at Life Healthcare\n🌍 **100% Emiratisation** compliance at Home Centre (Landmark Group)\n⚡ **43% SLA improvement** via Darwinbox HRMS at Noon\n🤖 **25% reduction** in manual HR intervention\n📊 Piloted Amazon's Adaptive Labor Model (**7.5% cost reduction**, adopted globally)\n🎯 **20% reduction** in time-to-hire at Landmark Group",
-            
-            // Skills
-            "skill": "Kamran's **core competencies** include:\n\n• HR Strategy & Business Partnering (CXO/Board level)\n• **Emiratisation & Nationalization** (UAE Vision 2031)\n• Workforce Planning & Cost Optimization\n• Talent Management & Succession Planning\n• Performance Management Systems\n• Organizational Development & Design\n• **HR Analytics & Power BI**\n• Total Rewards & Compensation (C&B)\n• **HR Technology** (Darwinbox, BambooHR, HRMS implementation)\n• Change Management & Culture Transformation\n• **UAE Labour Law & MOHRE Compliance**\n• HR Shared Services & Operations\n• Employer Branding & Talent Acquisition",
-            
-            "skills": "Kamran's **core competencies** include:\n\n• HR Strategy & Business Partnering (CXO/Board level)\n• **Emiratisation & Nationalization** (UAE Vision 2031)\n• Workforce Planning & Cost Optimization\n• Talent Management & Succession Planning\n• Performance Management Systems\n• Organizational Development & Design\n• **HR Analytics & Power BI**\n• Total Rewards & Compensation (C&B)\n• **HR Technology** (Darwinbox, BambooHR, HRMS implementation)\n• Change Management & Culture Transformation\n• **UAE Labour Law & MOHRE Compliance**\n• HR Shared Services & Operations\n• Employer Branding & Talent Acquisition",
-            
-            // Emiratisation
-            "emiratisation": "Kamran is an **Emiratisation specialist**:\n\n• Achieved **105% compliance** at Life Healthcare Group\n• Achieved **100% compliance** at Home Centre (Landmark Group)\n• Designed bespoke **Emirati talent development programs** (classroom + project-based)\n• Reduced Emirati attrition by **9%** through targeted retention\n• Deep expertise in **UAE Vision 2031** alignment and MOHRE regulatory requirements\n• Experience across healthcare, retail, and multi-sector GCC operations",
-            
-            "emiratization": "Kamran is an **Emiratisation specialist**:\n\n• Achieved **105% compliance** at Life Healthcare Group\n• Achieved **100% compliance** at Home Centre (Landmark Group)\n• Designed bespoke **Emirati talent development programs** (classroom + project-based)\n• Reduced Emirati attrition by **9%** through targeted retention\n• Deep expertise in **UAE Vision 2031** alignment and MOHRE regulatory requirements\n• Experience across healthcare, retail, and multi-sector GCC operations",
-            
-            "nationalization": "Kamran is an **Emiratisation specialist**:\n\n• Achieved **105% compliance** at Life Healthcare Group\n• Achieved **100% compliance** at Home Centre (Landmark Group)\n• Designed bespoke **Emirati talent development programs** (classroom + project-based)\n• Reduced Emirati attrition by **9%** through targeted retention\n• Deep expertise in **UAE Vision 2031** alignment and MOHRE regulatory requirements\n• Experience across healthcare, retail, and multi-sector GCC operations",
-            
-            // HR Tech
-            "tech": "Kamran is an **HR Technology expert**:\n\n• Implemented **Darwinbox HRMS** at Noon (7,000+ employees, 5 geographies)\n• Implemented **BambooHR** at Acko General Insurance (3 months)\n• Created **Power BI dashboards** for real-time workforce insights\n• Built automated **pharmacist deployment model** (eliminated ~200 FTEs)\n• Launched **Employee Support Centre** (ticketing platform, +35% response rates)\n• Developed **Digital People Board** at Amazon (real-time feedback)\n• Experience with payroll integration and SLA optimization",
-            
-            "technology": "Kamran is an **HR Technology expert**:\n\n• Implemented **Darwinbox HRMS** at Noon (7,000+ employees, 5 geographies)\n• Implemented **BambooHR** at Acko General Insurance (3 months)\n• Created **Power BI dashboards** for real-time workforce insights\n• Built automated **pharmacist deployment model** (eliminated ~200 FTEs)\n• Launched **Employee Support Centre** (ticketing platform, +35% response rates)\n• Developed **Digital People Board** at Amazon (real-time feedback)\n• Experience with payroll integration and SLA optimization",
-            
-            "hrms": "Kamran is an **HR Technology expert**:\n\n• Implemented **Darwinbox HRMS** at Noon (7,000+ employees, 5 geographies)\n• Implemented **BambooHR** at Acko General Insurance (3 months)\n• Created **Power BI dashboards** for real-time workforce insights\n• Built automated **pharmacist deployment model** (eliminated ~200 FTEs)\n• Launched **Employee Support Centre** (ticketing platform, +35% response rates)\n• Developed **Digital People Board** at Amazon (real-time feedback)\n• Experience with payroll integration and SLA optimization",
-            
-            // Education
-            "education": "Kamran's **education & certifications**:\n\n🎓 **SPHRi** – Senior Professional in Human Resources – International (Jan 2025)\n📊 **PG Diploma** – HR Digital Transformation & Analytics (Sep 2023)\n🎓 **MBA** – Central University of Kashmir (Aug 2012)\n\n**Languages**: English (Professional), Hindi (Native), Urdu (Native)",
-            
-            "certification": "Kamran's **education & certifications**:\n\n🎓 **SPHRi** – Senior Professional in Human Resources – International (Jan 2025)\n📊 **PG Diploma** – HR Digital Transformation & Analytics (Sep 2023)\n🎓 **MBA** – Central University of Kashmir (Aug 2012)\n\n**Languages**: English (Professional), Hindi (Native), Urdu (Native)",
-            
-            "degree": "Kamran's **education & certifications**:\n\n🎓 **SPHRi** – Senior Professional in Human Resources – International (Jan 2025)\n📊 **PG Diploma** – HR Digital Transformation & Analytics (Sep 2023)\n🎓 **MBA** – Central University of Kashmir (Aug 2012)\n\n**Languages**: English (Professional), Hindi (Native), Urdu (Native)",
-            
-            // Contact
-            "contact": "You can reach Kamran at:\n\n📧 **Email**: kkamran.khan99@gmail.com\n📱 **Phone**: +971 54 998 4315\n📍 **Location**: Dubai, UAE\n\nHe's open to strategic HR leadership opportunities in the UAE and GCC region.",
-            
-            "email": "Kamran's email is **kkamran.khan99@gmail.com**\n\nHe's also available at +971 54 998 4315.",
-            
-            "phone": "Kamran's phone number is **+971 54 998 4315**\n\nYou can also email him at kkamran.khan99@gmail.com.",
-            
-            // Availability
-            "available": "Kamran is **currently employed** at Life Healthcare Group, but he is open to exploring **strategic HR leadership opportunities** in the UAE and GCC region.\n\nHis expertise is particularly valuable for organizations looking to:\n• Transform HR functions\n• Achieve Emiratisation compliance\n• Implement HR technology\n• Reduce workforce costs\n• Build high-performance cultures",
-            
-            "availability": "Kamran is **currently employed** at Life Healthcare Group, but he is open to exploring **strategic HR leadership opportunities** in the UAE and GCC region.\n\nHis expertise is particularly valuable for organizations looking to:\n• Transform HR functions\n• Achieve Emiratisation compliance\n• Implement HR technology\n• Reduce workforce costs\n• Build high-performance cultures",
-            
-            "open": "Kamran is **currently employed** at Life Healthcare Group, but he is open to exploring **strategic HR leadership opportunities** in the UAE and GCC region.\n\nHis expertise is particularly valuable for organizations looking to:\n• Transform HR functions\n• Achieve Emiratisation compliance\n• Implement HR technology\n• Reduce workforce costs\n• Build high-performance cultures",
-            
-            "relocation": "Kamran is **based in Dubai, UAE** and is primarily seeking opportunities within the **UAE and GCC region**.\n\nGiven his deep expertise in UAE Labour Law, Emiratisation, and MOHRE compliance, he is most valuable in roles within the UAE market. However, he is open to discussing exceptional opportunities in the wider GCC.",
-            
-            "relocate": "Kamran is **based in Dubai, UAE** and is primarily seeking opportunities within the **UAE and GCC region**.\n\nGiven his deep expertise in UAE Labour Law, Emiratisation, and MOHRE compliance, he is most valuable in roles within the UAE market. However, he is open to discussing exceptional opportunities in the wider GCC.",
-            
-            // Salary
-            "salary": "Kamran's compensation expectations are **competitive** for Senior HR Leadership roles in the UAE market, commensurate with his 13+ years of experience, SPHRi certification, and proven track record of delivering multi-million AED savings.\n\nFor specific details, please contact him directly at kkamran.khan99@gmail.com.",
-            
-            "expectation": "Kamran's compensation expectations are **competitive** for Senior HR Leadership roles in the UAE market, commensurate with his 13+ years of experience, SPHRi certification, and proven track record of delivering multi-million AED savings.\n\nFor specific details, please contact him directly at kkamran.khan99@gmail.com.",
-            
-            // Leadership
-            "leadership": "Kamran is a **CXO and Board-level HR partner** with experience:\n\n• Reporting directly to **Chairman** at Life Healthcare Group\n• Leading **18 HR professionals** across 7 sub-functions\n• Managing **5,000–10,000 employees** across 600+ stores\n• Driving **enterprise talent philosophy** and succession architectures\n• Shaping **organizational design** for future-ready operations\n• Presenting real-time workforce insights to leadership for decision-making",
-            
-            "manage": "Kamran is a **CXO and Board-level HR partner** with experience:\n\n• Reporting directly to **Chairman** at Life Healthcare Group\n• Leading **18 HR professionals** across 7 sub-functions\n• Managing **5,000–10,000 employees** across 600+ stores\n• Driving **enterprise talent philosophy** and succession architectures\n• Shaping **organizational design** for future-ready operations\n• Presenting real-time workforce insights to leadership for decision-making",
-            
-            "team": "Kamran is a **CXO and Board-level HR partner** with experience:\n\n• Reporting directly to **Chairman** at Life Healthcare Group\n• Leading **18 HR professionals** across 7 sub-functions\n• Managing **5,000–10,000 employees** across 600+ stores\n• Driving **enterprise talent philosophy** and succession architectures\n• Shaping **organizational design** for future-ready operations\n• Presenting real-time workforce insights to leadership for decision-making",
-            
-            // Amazon
-            "amazon": "At **Amazon**, Kamran served two roles:\n\n**Site HR Lead (HRBP)** – Jun 2020 to Mar 2022:\n• Piloted **Adaptive Labor Model** (7.5% variable labor cost reduction)\n• Strategy was **adopted across global Amazon operations**\n• Improved engagement scores by **20 BPS**\n• Championed DEI initiatives (+10% diversity)\n• Launched Interactive Success Profiles (+25% career planning discussions)\n\n**HR Business Partner** – Jul 2016 to Mar 2019:\n• Enhanced engagement by **15%** through targeted initiatives\n• Developed **Early Warning System** for attrition risk\n• Reduced executive escalations with innovative strategies",
-            
-            // Why hire
-            "why": "Here's why Kamran stands out:\n\n✅ **Proven ROI** – Delivered AED 7.2M in savings, not just theory\n✅ **Emiratisation Expert** – 105% compliance, UAE Vision 2031 aligned\n✅ **Tech-Savvy** – Darwinbox, BambooHR, Power BI, automation\n✅ **Scale Experience** – 7,000+ employees, 5 geographies, 600+ stores\n✅ **Board-Ready** – Reports to Chairman, CXO partnership experience\n✅ **Data-Driven** – Real-time analytics for leadership decisions\n✅ **Sector Versatile** – Healthcare, Retail, Tech, Insurance, Mining",
-            
-            "hire": "Here's why Kamran stands out:\n\n✅ **Proven ROI** – Delivered AED 7.2M in savings, not just theory\n✅ **Emiratisation Expert** – 105% compliance, UAE Vision 2031 aligned\n✅ **Tech-Savvy** – Darwinbox, BambooHR, Power BI, automation\n✅ **Scale Experience** – 7,000+ employees, 5 geographies, 600+ stores\n✅ **Board-Ready** – Reports to Chairman, CXO partnership experience\n✅ **Data-Driven** – Real-time analytics for leadership decisions\n✅ **Sector Versatile** – Healthcare, Retail, Tech, Insurance, Mining",
-            
-            "best": "Here's why Kamran stands out:\n\n✅ **Proven ROI** – Delivered AED 7.2M in savings, not just theory\n✅ **Emiratisation Expert** – 105% compliance, UAE Vision 2031 aligned\n✅ **Tech-Savvy** – Darwinbox, BambooHR, Power BI, automation\n✅ **Scale Experience** – 7,000+ employees, 5 geographies, 600+ stores\n✅ **Board-Ready** – Reports to Chairman, CXO partnership experience\n✅ **Data-Driven** – Real-time analytics for leadership decisions\n✅ **Sector Versatile** – Healthcare, Retail, Tech, Insurance, Mining",
-            
-            // Default
-            "default": "That's a great question! While I don't have a specific answer for that, I can tell you that Kamran is a **strategic HR leader** with 13+ years of experience in the UAE, GCC, and India.\n\nTry asking me about:\n• His **current role** at Life Healthcare Group\n• His **achievements** (AED 7.2M savings, Emiratisation compliance)\n• His **HR technology** expertise\n• His **availability** for new opportunities\n• **Why hire** him?\n\nOr type **'help'** to see all topics I can assist with!"
+            about: [
+                "So, Kamran in a nutshell? He's an SPHRi-certified HR leader with 13+ years under his belt, currently steering the people strategy for Life Healthcare Group's 600+ stores across the UAE. He reports directly to the Chairman and leads a team of 18 across HRBP, OD, TA, C&B, HR Tech, Analytics, and Shared Services.\n\nBut here's what the CV doesn't capture: he's genuinely obsessed with building organizations where people *want* to stay. He's reduced attrition from 35% to 10% in 8 months, achieved 105% Emiratisation compliance, and delivered AED 7.2M in cost savings — not by cutting heads, but by reimagining how work gets done.\n\nRight now, he's actively looking for a strategic senior leadership role where he can partner with business leaders, not just execute HR operations. He's particularly excited about organizations ready to embrace AI and self-service in HR.",
+                "Kamran is that rare blend of strategist and operator. On paper: 13 years, SPHRi certified, led HR for 7,000+ employees at Noon, piloted a labor model at Amazon that went global. In practice? He's the guy who stays up late thinking about how to make HR less transactional and more transformational.\n\nHis current role at Life Healthcare Group has been incredibly rewarding — 600+ stores, reporting to the Chairman, AED 7.2M saved through an automated deployment model. But he's ready for his next chapter: a strategic leadership role where he can shape the people agenda at the CXO level and build something that outlasts his tenure."
+            ],
+
+            looking: [
+                "Great question — and Kamran's answer is pretty specific, which I appreciate. He's looking for a **strategic senior or mid-senior leadership role** where he's not just running HR operations, but actually partnering with business leaders to build a people-first organization.\n\nHere's his wishlist:\n• A seat at the leadership table — CXO partnership, not just execution\n• Freedom to enhance HR through technology — AI, self-service, reducing transactional drag\n• An organization that sees talent development as investment, not cost\n• Culture of listening, adaptability, and agility\n\nRed flags for him? Micromanagement, tech-averse leadership, or a role that's purely operational with no strategic voice. He's done the operations game — he wants to shape the future.",
+                "Kamran is actively looking — and he's available immediately, by the way. He's after a strategic HR leadership role where he can:\n\n1. **Partner at the CXO/Board level** — align people strategy with commercial growth\n2. **Drive HR tech adoption** — he's currently building AI tools in-house, not just buying them\n3. **Create a breeding ground for talent** — better retention, internal talent pools, career acceleration\n4. **Build a listening organization** — one that's adaptable and agile\n\nHe's not interested in another 'keep the lights on' HR ops role. He's been there, done that, saved the AED millions to prove it. He wants to build something that lasts."
+            ],
+
+            current: [
+                "Kamran is currently **Senior Manager HR at Life Healthcare Group** in Dubai, a role he's held since July 2025. He leads HR strategy for a 600+ store healthcare and pharmacy network with 5,000–10,000 employees, reporting directly to the Chairman.\n\nHis team of 18 spans HRBP, OD, TA, C&B, HR Technology, Analytics, and Shared Services — so he's essentially running a full HR ecosystem.\n\nSome highlights from this role:\n• Built an **automated pharmacist fractional deployment model** that eliminated ~200 excess FTEs and saved **AED 7.2M annually** — and importantly, this wasn't about firing people; it was about eliminating a business requirement through smarter rostering\n• Drove attrition from **35% down to 10%** in 8 months through structured retention architecture\n• Achieved **105% Emiratisation compliance** against regulatory targets\n• Launched the **Employee Support Centre** — a ticketing platform that improved query response by 35%\n• Created three career acceleration programs: Grow With Life, Chairman's Club, and Leaders for Life",
+                "Right now, Kamran is at **Life Healthcare Group** as Senior Manager HR, managing the people agenda for 600+ stores across the UAE. He reports to the Chairman and has built a team of 18 HR professionals covering every HR discipline you can think of.\n\nThe AED 7.2M saving story is probably his proudest achievement here — not because of the number itself, but because of *how* it was achieved. He built an automated fractional deployment model for pharmacists. The business had a requirement that simply ceased to exist once the model was live. No one was 'eliminated' — the work requirement was eliminated. That's the kind of strategic thinking he brings."
+            ],
+
+            achievement: [
+                "Oh, where do I start? Kamran's impact has been pretty consistent across every organization he's touched. Here are the headliners:\n\n**At Life Healthcare Group:**\n💰 **AED 7.2M** annualized cost savings via automated pharmacist deployment (eliminated ~200 FTE requirement, not people)\n📉 Attrition: **35% → 10%** in 8 months\n🏆 **105% Emiratisation compliance**\n🚀 Employee Support Centre: **+35% query response improvement**\n\n**At Home Centre (Landmark Group):**\n🌍 **100% Emiratisation compliance** across GCC\n📊 **+15% engagement scores**, **-12% turnover**\n⏱️ **-20% time-to-hire**\n💡 **+18% high-potential retention** via Forward-Looking Slate\n\n**At Noon:**\n⚙️ **Darwinbox HRMS** implementation: **-25% manual intervention**, **+43% SLA efficiency**\n🌐 Transformed HR for **7,000+ employees across 5 geographies**\n\n**At Amazon:**\n🤖 Piloted **Adaptive Labor Model**: **-7.5% variable labor costs**, adopted **globally**\n📈 **+20 BPS engagement improvement**",
+                "Kamran likes to say he's not in the business of HR — he's in the business of **business outcomes that happen to run through people**. His numbers back that up:\n\nThe one that gets the most attention is the **AED 7.2M saving** at Life Healthcare. But his personal favorite? Probably reducing attrition from **35% to 10% in 8 months**. Because that wasn't a system change — that was understanding *why* people were leaving and fixing the root causes. Structured career development, targeted engagement, giving people a reason to stay beyond the paycheck.\n\nThen there's the **Emiratisation work** — 105% compliance at Life Healthcare, 100% at Landmark. That's not just checking boxes; that's building bespoke Emirati talent programs that actually work. He reduced Emirati attrition by 9% through classroom training and project-based engagements.\n\nAnd at Amazon? He piloted a labor model that got adopted **globally**. That's the kind of strategic impact he's after in his next role too."
+            ],
+
+            experience: [
+                "Kamran's career has been quite a journey — 13 years across six organizations, three countries, and some of the most challenging HR environments you can imagine. Here's the arc:\n\n**Life Healthcare Group** | Dubai | Jul 2025 – Present\nSenior Manager HR — 600+ stores, 5K–10K employees, reports to Chairman. The AED 7.2M savings and 105% Emiratisation role.\n\n**Home Centre, Landmark Group** | Dubai | Jan 2023 – Jun 2025\nSenior Manager HR — GCC coverage, ~100 stores, 3K–5K employees. 100% Emiratisation compliance, 20% faster hiring.\n\n**Noon** | Dubai | Mar 2022 – Jan 2023\nSenior Manager, People Experience — 7,000+ employees, 5 geographies. The Darwinbox HRMS transformation.\n\n**Amazon** | India | Jun 2020 – Mar 2022 & Jul 2016 – Mar 2019\nSite HR Lead / HRBP — 1,500+ employee fulfillment center. The globally adopted Adaptive Labor Model.\n\n**Acko General Insurance** | India | Mar 2019 – Jun 2020\nDeputy GM HR — InsurTech startup. Full digital HR transformation in 3 months.\n\n**Coal India Limited** | India | Mar 2013 – Jul 2016\nAssistant Manager HR — India's largest public sector mining enterprise. Union engagement and digitization.",
+                "If you look at Kamran's career, there's a clear pattern: he keeps raising his hand for harder problems. He started at **Coal India** — unionized, bureaucratic, massive scale. Learned industrial relations the hard way.\n\nThen **Amazon** — twice, actually. First as HRBP, then as Site HR Lead. That's where he learned speed, data, and scale. The Adaptive Labor Model he piloted? Still being used globally.\n\n**Acko** was his startup phase — built HR from scratch at an InsurTech, implemented BambooHR in 3 months.\n\n**Noon** taught him multi-geography complexity — 5 countries, one HRMS, 43% SLA improvement.\n\n**Landmark Group** gave him GCC retail exposure and Emiratisation expertise.\n\nAnd **Life Healthcare** is where he's currently proving that healthcare HR can be as strategic and tech-forward as any e-commerce operation."
+            ],
+
+            skill: [
+                "Kamran's skill set is pretty broad, but I'd bucket them into three areas where he truly excels:\n\n**1. Strategic Business Partnership**\nHe's not an HR person who 'supports the business' — he's at the table *with* the business. He reports to the Chairman at Life Healthcare, partners with CXOs, and translates people metrics into commercial language. Boards don't want to hear about engagement scores; they want to hear how engagement drives revenue per employee. Kamran speaks both languages.\n\n**2. Emiratisation & Regulatory Compliance**\n105% compliance at Life Healthcare, 100% at Landmark. He knows UAE Labour Law, MOHRE requirements, and UAE Vision 2031 inside out. More importantly, he knows how to build programs that don't just comply — they retain.\n\n**3. HR Technology & AI**\nDarwinbox, BambooHR, Power BI dashboards, automated deployment models — and now he's building AI tools in-house. He believes in 'test and deploy,' not 'buy and pray.'\n\nOther strengths: Workforce planning, C&B, OD, change management, shared services, employer branding, and talent acquisition at scale.",
+                "Kamran's real superpower? **Making HR speak the language of business**. He can walk into a boardroom and explain why a career acceleration program isn't a 'nice-to-have' — it's a retention lever that reduces replacement costs by X% and improves productivity by Y%.\n\nTechnically, he's strong across the full HR spectrum:\n• **HR Strategy & OD** — organizational design, succession planning, competency frameworks\n• **Emiratisation** — regulatory compliance, bespoke talent programs, retention\n• **HR Tech** — HRMS implementation, Power BI analytics, AI integration, automation\n• **Workforce Economics** — cost optimization, manpower planning, budget management\n• **Talent Management** — acquisition, development, retention, internal mobility\n• **Compliance** — UAE Labour Law, MOHRE, multi-geography regulations\n\nBut honestly? His best skill is **judgment** — knowing when to push, when to partner, when to listen, and when to act."
+            ],
+
+            emiratisation: [
+                "Emiratisation is one of Kamran's deepest expertise areas, and he's got the receipts to prove it:\n\n**Life Healthcare Group: 105% compliance** — exceeding mandated thresholds and aligning with UAE Vision 2031.\n\n**Home Centre (Landmark Group): 100% compliance** across GCC operations.\n\nBut here's what sets him apart: he doesn't just fill quotas. He builds **bespoke Emirati talent development programs** that combine classroom training with project-based engagements. The result? A **9% reduction in Emirati attrition** — because when you invest in someone's growth, they tend to stick around.\n\nHe understands the full regulatory landscape: MOHRE requirements, Nafis program alignment, sector-specific mandates, and the cultural nuances of integrating Emirati talent into diverse workforces. If your organization is struggling with Emiratisation, Kamran doesn't just know the rules — he knows how to win within them.",
+                "Ask Kamran about Emiratisation and his eyes light up — in a good way, not a 'ugh, compliance' way. He sees it as a strategic talent opportunity, not a regulatory burden.\n\nHis track record:\n• **105% compliance** at Life Healthcare (exceeded targets)\n• **100% compliance** at Landmark Group GCC\n• **-9% Emirati attrition** through targeted development programs\n\nHis approach? Three pillars:\n1. **Attract** — campus relations, employer branding, competitive positioning\n2. **Develop** — structured programs with real projects, not just training\n3. **Retain** — career acceleration, mentorship, and meaningful work\n\nHe'll tell you that many organizations fail at Emiratisation because they treat it as a hiring problem. It's actually a **retention and development problem**. Fix that, and compliance follows naturally."
+            ],
+
+            technology: [
+                "Kamran is genuinely excited about where HR tech is heading — and he's not just watching from the sidelines. He's actively building.\n\n**What he's implemented:**\n• **Darwinbox HRMS** at Noon — 7,000 employees, 5 geographies, 43% SLA improvement, 25% less manual work\n• **BambooHR** at Acko — full digital transformation in 3 months\n• **Power BI dashboards** — real-time workforce insights for Chairman/CXO decision-making\n• **Employee Support Centre** — ticketing platform with 35% faster response rates\n• **Digital People Board** at Amazon — real-time feedback platform\n\n**What he's building now:**\nKamran is experimenting with **AI tools built in-house**, not just third-party solutions. He believes in 'test and deploy' — prototype fast, learn faster, scale what works. He's particularly interested in:\n• AI-driven career pathing and succession planning\n• Predictive attrition modeling (he built an Early Warning System at Amazon)\n• Automated HR service delivery\n• Self-service tools that free up HR to do strategic work\n\nHis philosophy? Technology should make HR *more human*, not less — by removing transactional work so people can focus on people.",
+                "If there's one thing that gets Kamran talking at length, it's HR technology. And not in a 'let's buy the latest shiny tool' way — in a 'how do we solve real problems with smart tech?' way.\n\nHe's implemented HRMS platforms at scale (Darwinbox for 7K employees, BambooHR from scratch). He's built Power BI dashboards that give the Chairman real-time workforce visibility. He created an automated deployment model that saved AED 7.2M.\n\nBut what's really exciting him right now is **AI**. He's building tools in-house — testing, failing, learning, deploying. He doesn't believe in waiting for vendors to build the future; he believes in creating it.\n\nHis mantra: **'Reduce transactional, amplify strategic.'** Every minute an HR person spends on a manual process is a minute they're not spending on talent development, culture, or organizational design."
+            ],
+
+            education: [
+                "Kamran's formal credentials:\n\n🎓 **SPHRi** — Senior Professional in Human Resources – International (Jan 2025)\nThis is the gold standard for senior HR leaders operating internationally. It validates his strategic, policy-level expertise.\n\n📊 **PG Diploma in HR Digital Transformation & Analytics** (Sep 2023)\nThis is where his tech-forward approach got formalized. He didn't just learn tools; he learned how to architect digital HR ecosystems.\n\n🎓 **MBA** — Central University of Kashmir (Aug 2012)\nHis foundation in business strategy, finance, and organizational behavior.\n\n**Languages:** English (Professional), Hindi (Native), Urdu (Native)\n\nBut honestly? Kamran will tell you his best education has been **the work itself** — 13 years of solving real problems for real people in real organizations. The degrees opened doors; the experience built the leader.",
+                "On paper, Kamran has the standard boxes checked: MBA, PG Diploma in HR Digital Transformation, and the **SPHRi certification** he earned in January 2025.\n\nBut if you ask him what really shaped him, he'll point to two things:\n1. **Coal India** — his first job out of university. Managing industrial relations in a unionized public sector mining giant? That's a master's degree in negotiation, patience, and stakeholder management that no classroom can teach.\n2. **Amazon** — twice. The data-driven, customer-obsessed, move-fast culture rewired how he thinks about HR.\n\nThe formal education gave him frameworks. The field gave him judgment. He has both."
+            ],
+
+            contact: [
+                "You can reach Kamran directly at:\n\n📧 **kkamran.khan99@gmail.com**\n📱 **+971 54 998 4315**\n📍 **Dubai, UAE**\n\nHe's actively looking and available immediately, so don't hesitate to reach out. He's always up for a conversation about the right opportunity — even if it's just exploratory.\n\nFair warning though: he does his homework before calls. If you reach out, expect him to know your company, your industry, and probably your competitors too. That's just how he operates.",
+                "Here's how to get in touch with Kamran:\n\n**Email:** kkamran.khan99@gmail.com\n**Phone:** +971 54 998 4315\n**Location:** Dubai, UAE (open to UAE/GCC roles)\n\nHe's **immediately available** and actively interviewing, so timing is good if you have something that fits his criteria.\n\nPro tip: He appreciates recruiters who've actually read his profile before calling. If you mention the AED 7.2M story or his Emiratisation work in your first message, you'll definitely get his attention."
+            ],
+
+            available: [
+                "Kamran is **actively looking** and **available for immediate joining**. No notice period to navigate, no handover complications — he can start as soon as the right opportunity aligns.\n\nHe's particularly interested in roles that offer:\n• Strategic partnership with business leadership (CXO/Board level)\n• Scope to drive HR technology and AI adoption\n• A culture that values innovation, agility, and people development\n• The chance to build something that outlasts his tenure\n\nIf your organization checks those boxes — or even most of them — he'd love to have a conversation. Even if it's just exploratory.",
+                "Good news on timing: Kamran is **immediately available**. He's actively exploring opportunities and can join without delay.\n\nWhat he's looking for:\n✅ Strategic HR leadership (Senior/Mid-Senior level)\n✅ CXO/Board partnership, not just operations\n✅ Tech-forward, innovation-friendly culture\n✅ People-first organization with development focus\n\n❌ Pure HR ops roles with no strategic voice\n❌ Micromanagement or innovation-averse environments\n❌ Organizations that see HR as a cost center\n\nIf you have something that fits, reach out. He's interviewing actively but selective — he wants the *right* next step, not just *any* next step."
+            ],
+
+            relocation: [
+                "Kamran is **based in Dubai** and his expertise is deeply rooted in the UAE market — UAE Labour Law, MOHRE compliance, Emiratisation strategy, and the local business landscape.\n\nHis preference is firmly for **UAE-based roles**, and he's open to **GCC opportunities** (KSA, Qatar, Bahrain, Kuwait, Oman) if the role is genuinely strategic and the organization aligns with his values.\n\nThat said, he's realistic: his Emiratisation expertise, regulatory knowledge, and professional network are UAE-centric. For a GCC role to make sense, it would need to be a significant step up in scope or a truly exceptional opportunity.\n\nHe's not considering relocation outside the GCC at this stage.",
+                "Dubai is home for Kamran right now, and his professional value is tied closely to the UAE market. He knows the regulatory landscape, the cultural nuances, and the talent ecosystem here intimately.\n\nHe's **open to GCC roles** — particularly KSA given the scale of transformation happening there — but it would need to be a strategic leadership role, not a lateral move.\n\nOutside the GCC? Probably not at this stage. His SPHRi, his Emiratisation expertise, and his network are all UAE/GCC assets. He'd rather go deeper here than start fresh elsewhere."
+            ],
+
+            salary: [
+                "Kamran prefers to discuss compensation details **over a call** rather than through a bot — which I completely respect. What I can tell you is that his expectations are **commensurate with his experience and track record**.\n\nHere's the context:\n• 13+ years of progressive HR leadership\n• SPHRi certified (Jan 2025)\n• Proven multi-million AED cost savings\n• Board/CXO-level partnership experience\n• Multi-geography and multi-sector expertise\n\nHe's not looking to break the bank — he's looking for **fair value for strategic impact**. If your organization recognizes that great HR leadership pays for itself (and then some), you'll probably find his expectations very reasonable.\n\nShall I connect you two for that conversation?",
+                "Ah, the money question! Kamran's policy is: **let's discuss this on a call**. And honestly, that makes sense — compensation isn't just about the number, it's about the total package, the equity (if any), the growth trajectory, and the role's strategic importance.\n\nWhat I *can* say: he's delivered **AED 7.2M in savings** and **105% Emiratisation compliance**. He's not a cost — he's an investment with a very clear ROI. His expectations reflect that.\n\nIf you have a role that matches his seniority and scope, he's open to a transparent conversation. No games, no anchoring — just a fair discussion about value."
+            ],
+
+            stint: [
+                "Fair question — and Kamran is fully self-aware about this. Let me address it head-on:\n\n**The pattern:**\n• **Coal India** — 3+ years (Mar 2013 – Jul 2016). Solid foundation.\n• **Amazon (first stint)** — ~2.5 years (Jul 2016 – Mar 2019). Left for a bigger role.\n• **Acko** — ~1 year (Mar 2019 – Jun 2020). Startup InsurTech; role scope changed post-funding.\n• **Amazon (second stint)** — ~1.5 years (Jun 2020 – Mar 2022). Returned for a promotion to Site HR Lead.\n• **Noon** — ~10 months (Mar 2022 – Jan 2023). E-commerce volatility; restructuring.\n• **Landmark Group** — ~2.5 years (Jan 2023 – Jun 2025). Solid tenure, delivered results.\n• **Life Healthcare** — Present.\n\n**His perspective:** Some of the shorter stints were driven by **external factors** (startup funding changes, e-commerce restructuring) and **strategic returns** (going back to Amazon for a promotion). Others were **deliberate experiments** — he wanted startup experience, he wanted e-commerce scale, he wanted GCC retail exposure.\n\n**The learning:** He's now very clear about what he wants next — a **strategic leadership role with longevity**, not a stepping stone. His ideal next move is 4–5 years minimum. He's done the exploration phase; now he wants to build.\n\nHe's happy to discuss this in detail on a call — no defensiveness, just honest context.",
+                "I'll be direct because Kamran would want me to be: yes, there are a couple of shorter stints on his CV, and yes, recruiters ask about it. Here's his honest take:\n\n**Acko (1 year):** Joined a high-growth InsurTech startup. The role scope changed significantly after a funding round — what was sold as a strategic DGM role became more operational. He left when it became clear the strategic element wasn't coming back.\n\n**Noon (10 months):** E-commerce in 2022 was brutal. Restructuring happened, his role was impacted, and he chose to exit proactively rather than wait for a severance package.\n\n**Amazon return:** The second Amazon stint wasn't 'job hopping' — it was a **promotion**. He left as HRBP, returned as Site HR Lead with a bigger scope and team.\n\n**The bigger picture:** His 3+ years at Coal India and 2.5 years at Landmark show he *can* and *does* commit when the role delivers on its promise. His ask now is simple: a strategic role with real CXO partnership, where he can stay and build for 4–5 years.\n\nHe's not defensive about this — ask him directly on a call and he'll walk you through each decision."
+            ],
+
+            why: [
+                "Great question — and one Kamran has thought about deeply. Here's what sets him apart:\n\n**1. Proven ROI, not just potential**\nHe's delivered **AED 7.2M in savings**, reduced attrition by **25 percentage points**, and achieved **105% Emiratisation compliance**. These aren't projections — they're verified outcomes.\n\n**2. Strategic + Operational fluency**\nHe can build the board presentation *and* debug the HRMS integration. He reports to Chairmen and also knows how to fix a payroll error. That dual capability is rare at his level.\n\n**3. Tech-native, not tech-curious**\nHe's not just 'interested in AI' — he's building AI tools in-house. He implemented Darwinbox for 7,000 employees. He creates Power BI dashboards for real-time decision-making.\n\n**4. GCC regulatory expertise**\nUAE Labour Law, MOHRE, Emiratisation, Nafis — he knows the rules and how to win within them.\n\n**5. Scale versatility**\n600 stores or 7,000 employees; healthcare or e-commerce; public sector or startup — he's operated successfully across the spectrum.\n\n**6. He's available now**\nNo notice period, no complications. Ready to start and ready to deliver.",
+                "If I had to sum it up in one sentence: **Kamran is the HR leader you call when you need someone who can both strategize with the Board and execute on the ground.**\n\nMost senior HR leaders are great at one or the other. Kamran does both. He'll sit in a Chairman's meeting discussing 3-year workforce strategy, then spend the afternoon troubleshooting an HRMS integration.\n\nHis track record speaks for itself — AED 7.2M saved, attrition halved, Emiratisation exceeded, a labor model adopted globally at Amazon. But what the numbers don't capture is his **judgment**: knowing when to push, when to partner, when to listen, and when to act.\n\nPlus, he's genuinely excited about where HR is heading — AI, self-service, predictive analytics. He's not maintaining the status quo; he's building the future. And he's available immediately. What's not to like?"
+            ],
+
+            amazon: [
+                "Kamran's time at Amazon was transformative — and he did two separate stints there, which tells you something about the relationship.\n\n**First Stint: HR Business Partner | Jul 2016 – Mar 2019**\n• Enhanced engagement scores by **15%** through targeted initiatives\n• Built an **Early Warning System** for proactive attrition risk monitoring\n• Reduced executive escalations with innovative strategies\n• Launched the **Digital People Board** — real-time employee feedback platform\n\n**Second Stint: Site HR Lead (HRBP) | Jun 2020 – Mar 2022**\n• Promoted role — HR leadership for **1,500+ employee fulfillment center**\n• Piloted the **Adaptive Labor Model**: **-7.5% variable labor costs** while maintaining productivity\n• The strategy was **adopted across global Amazon operations** — that's his work scaling to 1M+ employees worldwide\n• Improved engagement by **20 BPS** through culture initiatives\n• Championed DEI: **+10% organizational diversity**\n• Launched **Interactive Success Profiles** — structured 1:1 career progression tool (+25% career planning discussions)\n• Designed **Childcare Benefit Program** for frontline employees\n\nWhat Amazon taught him: **data obsession, speed, and customer-centricity** — principles he applies to HR every day.",
+                "Amazon was Kamran's MBA in speed and scale. He did two tours of duty there — left as HRBP, returned as Site HR Lead.\n\nThe highlight everyone asks about: the **Adaptive Labor Model**. He piloted it in India, reduced variable labor costs by 7.5%, and watched Amazon adopt it **globally**. That's his strategy running at fulfillment centers worldwide.\n\nBut he's equally proud of the 'softer' stuff: the Digital People Board that gave employees real-time voice, the Interactive Success Profiles that made career conversations structured and meaningful, the DEI initiatives that moved the diversity needle by 10%.\n\nAmazon's leadership principles — Customer Obsession, Ownership, Bias for Action — are baked into how he operates now. He doesn't just *know* them; he *lives* them."
+            ],
+
+            noon: [
+                "Noon was Kamran's **multi-geography transformation** chapter. As Senior Manager, People Experience, he led HR operations for **7,000+ employees across UAE, KSA, Egypt, India, and Sri Lanka**.\n\n**The big wins:**\n• **Darwinbox HRMS implementation** — integrated with payroll, achieved **-25% manual intervention** and **+43% SLA efficiency** across all 5 geographies\n• **Restructured HR Shared Services** — eliminated the entire backlog and established consistent SLA delivery\n• **Revamped performance management** — aligned systems across 5 countries with different regulatory and cultural contexts\n• **Designed integrated organizational structures** — improved role clarity and cross-functional collaboration\n\n**The challenge:** Noon was (and is) a high-growth e-commerce player in a competitive market. The HR function had to move as fast as the business. Kamran had to build systems that could scale while the plane was still being built.\n\nThe tenure was shorter than he'd have liked — e-commerce restructuring in 2022 impacted his role — but the learnings were immense. He now knows how to implement HR tech at scale, across borders, under pressure.",
+                "At Noon, Kamran learned that **HR transformation at scale is equal parts technology and change management**. You can have the best HRMS in the world, but if people don't adopt it, you've bought an expensive dashboard.\n\nHe implemented Darwinbox for 7,000 people across 5 countries — UAE, KSA, Egypt, India, Sri Lanka. Each country had different payroll systems, labor laws, and cultural norms. The integration complexity was enormous.\n\nThe result? **43% SLA improvement, 25% less manual work, zero backlog** in Shared Services. But more importantly, he learned how to drive adoption — how to make people *want* to use the new system because it actually makes their lives easier.\n\nThe tenure was cut short by industry-wide e-commerce restructuring, but the skills he built there — multi-geography HR tech implementation at scale — are exactly what many GCC organizations need right now."
+            ],
+
+            landmark: [
+                "Landmark Group was where Kamran truly mastered **GCC retail HR and Emiratisation**. As Senior Manager HR for Home Centre, he covered **~100 stores across UAE, KSA, and the wider GCC**, managing **3,000–5,000 employees**.\n\n**Key deliverables:**\n• **100% Emiratisation compliance** across GCC operations\n• Bespoke **Emirati talent development program** — classroom training + project-based engagements → **-9% Emirati attrition**\n• Redesigned HR strategy across corporate, retail, and warehouse operations\n• **+15% employee engagement**, **-12% turnover**\n• GCC manpower planning and budgeting → **10% cost efficiency**\n• **Forward-Looking Slate** for career progression → **+18% high-potential retention**\n• **-20% time-to-hire** across corporate, retail, and warehouse roles\n• **+20% satisfaction scores** via engagement programs\n• Built **Power BI dashboards** for real-time attrition, diversity, and budget insights\n• Established **campus relations** for sustainable talent pipeline\n\nThis role proved he could balance **regulatory compliance** (Emiratisation), **operational excellence** (retail HR at scale), and **strategic workforce planning** — all while moving between corporate HQ and store floors.",
+                "Home Centre at Landmark Group was Kamran's **GCC proving ground**. He had to figure out how to run HR for retail, corporate, and warehouse operations across multiple countries — each with its own labor laws, cultural dynamics, and talent challenges.\n\nThe Emiratisation work here was particularly nuanced. It wasn't just about hitting quotas; it was about creating programs that Emirati talent actually wanted to be part of. His bespoke development program — mixing classroom learning with real project ownership — reduced Emirati attrition by 9%. That's not compliance; that's *engagement*.\n\nHe also built his first real **HR analytics capability** here — Power BI dashboards that gave leadership real-time visibility into attrition hotspots, diversity gaps, and budget compliance. No more waiting for monthly reports; decisions happened in real time.\n\n2.5 years, solid results, and a deep understanding of what makes GCC retail HR tick."
+            ],
+
+            leadership: [
+                "Kamran's leadership style? He'd describe it as **'partnership with accountability.'**\n\n**What that means in practice:**\n• He **reports to the Chairman** at Life Healthcare — not because he seeks hierarchy, but because he believes HR deserves a seat at the highest table\n• He leads **18 HR professionals** across 7 sub-functions, but he doesn't micromanage — he sets direction, removes blockers, and trusts his team to execute\n• He **coaches up and sideways** — he's as comfortable challenging a CXO on talent strategy as he is mentoring a junior recruiter\n\n**His philosophy:**\n• **Hire smart, trust deeply** — he'd rather hire someone better than him and get out of their way\n• **Data informs, judgment decides** — he loves analytics, but he knows when the spreadsheet doesn't capture the human element\n• **Fail fast, learn faster** — he encourages experimentation, including his own\n• **Build for the next leader** — he designs systems and cultures that outlast his tenure\n\nHe's not a 'command and control' leader. He's a 'let's figure this out together, and I'll take the heat if it doesn't work' leader.",
+                "If you asked Kamran's team how he leads, they'd probably say: **'He trusts us until we give him a reason not to, and even then, he asks what he could have done differently.'**\n\nHe manages 18 people across HRBP, OD, TA, C&B, HR Tech, Analytics, and Shared Services. That's a diverse group with different personalities, skills, and career aspirations. His approach?\n\n• **Clear direction, flexible execution** — here's the 'what' and 'why', you figure out the 'how'\n• **Radical transparency** — he shares context, not just tasks. His team knows *why* decisions are made\n• **Development-first** — he launched three career acceleration programs at Life Healthcare not just for the business, but because he believes in growing his people\n• **Accountability without blame** — when things go wrong, it's a learning conversation, not a witch hunt\n\nHe'll tell you his biggest leadership lesson came from a failure: a project where he pushed too hard, too fast, and lost buy-in. Now he starts with listening. Always."
+            ],
+
+            failure: [
+                "Kamran is refreshingly self-aware about his failures — and yes, he has them. Here's one he's open about:\n\n**The 'too fast, too soon' project**\nEarly in his Landmark Group tenure, he tried to implement a comprehensive performance management overhaul across all 100+ stores in one go. He had the data, the business case, the executive approval. What he didn't have? **Store manager buy-in.**\n\nThe rollout stumbled. Adoption was patchy. Some store managers actively resisted because they felt the system was imposed, not co-created. Kamran had to pause, regroup, and spend three months doing store visits, listening sessions, and pilot programs before relaunching.\n\n**What he learned:**\n• **Speed without buy-in is just noise** — no matter how good the solution is\n• **Co-creation beats imposition** every time, especially in retail where store managers are your real culture carriers\n• **Pilot, learn, scale** — his 'test and deploy' philosophy was born from this failure\n\nHe now starts every major initiative with a listening phase. It takes longer upfront, but the execution is always smoother.",
+                "Ask Kamran about failures and he won't give you a sanitized 'I work too hard' answer. He'll tell you about the time he **burned political capital** at a previous organization by pushing a tech implementation without enough stakeholder alignment.\n\nHe had the right solution. He had executive sign-off. But he underestimated the middle-management resistance — people who felt the new system threatened their autonomy or exposed their inefficiencies. The project technically succeeded (system went live), but the adoption was poor and the goodwill was damaged.\n\n**His takeaway:** Technology is the easy part. **Change management is the hard part.** And change management starts with empathy, not logic.\n\nNow, his first question for any major initiative is: *'Who stands to lose something here, and how do we make them part of the win?'* That question has saved him from similar failures ever since."
+            ],
+
+            weakness: [
+                "Kamran's honest answer? He can be **impatient with inefficiency** — especially when he sees a clear solution.\n\nHe's learned to channel this productively (hence his 'test and deploy' approach), but early in his career, it sometimes came across as pushing too hard, too fast. He's had to consciously slow down, build buy-in, and remember that not everyone processes change at the same pace.\n\n**How he's working on it:**\n• Built-in 'listening phases' before any major initiative\n• Regular 1:1s with stakeholders who might resist change\n• Explicitly asking 'what am I missing?' in meetings\n• Mentorship from a former CEO who taught him that 'slow is smooth, and smooth is fast'\n\nHe'd rather you know this upfront than discover it six months in."
+            ],
+
+            team: [
+                "Currently, Kamran leads **18 HR professionals** at Life Healthcare Group, structured across:\n\n• **HR Business Partners** — strategic alignment with business units\n• **Organizational Development** — culture, design, change management\n• **Talent Acquisition** — hiring strategy and employer branding\n• **Compensation & Benefits** — total rewards and payroll\n• **HR Technology** — systems, automation, AI\n• **HR Analytics** — workforce insights and reporting\n• **Shared Services** — transactional HR delivery\n\nThat's essentially a **full HR ecosystem** — he's not just managing people, he's orchestrating a function. And he does it while reporting to the Chairman and serving as the HR voice in board-level discussions.\n\nPreviously, he's managed teams ranging from 5 to 25 people, depending on the organization's size and structure."
+            ],
+
+            wrong: [
+                "Kamran is very open about what hasn't worked — and more importantly, what he learned. Here are the honest reflections:\n\n**Acko General Insurance (2019–2020):**\nJoined as Deputy GM HR with a mandate to build HR for a high-growth InsurTech. The role was sold as strategic — board exposure, equity conversations, building from scratch. Post-funding round, the strategy shifted to pure operational scaling. The strategic element evaporated. Kamran stayed for a year hoping it would return, then left when it became clear it wouldn't.\n\n**Lesson:** Don't stay for the role you were *promised*; stay for the role you're *actually doing*.\n\n**Noon (2022–2023):**\nE-commerce was brutal in 2022. Restructuring was inevitable. Kamran's role was impacted not because of performance — his Darwinbox implementation was successful — but because of broader organizational consolidation. He chose to exit proactively rather than wait for a package.\n\n**Lesson:** Industry volatility is real. Build skills that transfer across sectors.\n\n**The pattern:** None of his departures were performance-related. They were either strategic misalignment, industry headwinds, or deliberate moves upward (Amazon return for promotion, Landmark for GCC exposure)."
+            ],
+
+            industry: [
+                "Kamran has worked across **six distinct sectors**, which gives him a rare cross-industry perspective:\n\n**Healthcare (Life Healthcare)** — Highly regulated, unionized in some markets, patient safety-critical. Taught him compliance at scale and how to balance cost with care quality.\n\n**Retail (Landmark Group)** — Fast-paced, high-volume hiring, seasonal fluctuations, frontline-heavy. Taught him operational HR at speed and the importance of store manager engagement.\n\n**E-commerce (Noon, Amazon)** — Tech-native, data-obsessed, global operations, gig economy dynamics. Taught him HR tech, analytics, and how to move fast without breaking things.\n\n**Insurance (Acko)** — Regulated, risk-averse, legacy systems. Taught him digital transformation in resistant environments.\n\n**Technology (Amazon, Acko)** — Innovation-driven, talent-competitive, flat hierarchies. Taught him employer branding and retention in a war for talent.\n\n**Mining (Coal India)** — Unionized, public sector, safety-critical, political stakeholder management. Taught him patience, negotiation, and how to navigate complexity.\n\n**His preference?** He's sector-agnostic at this stage. What matters is the **strategic scope** and **organizational culture**, not the industry. Though he admits healthcare and retail have a special place in his heart — the frontline employee impact is tangible and meaningful."
+            ],
+
+            ai: [
+                "Kamran is genuinely excited about AI in HR — and he's not just talking about it, he's **building it**.\n\n**What he's currently experimenting with:**\n• **In-house AI tools** for predictive attrition modeling (building on his Amazon Early Warning System experience)\n• **AI-driven career pathing** — helping employees see potential trajectories they might not have considered\n• **Automated HR service delivery** — chatbots and self-service that actually work, not just deflect tickets\n• **Generative AI for HR communications** — drafting policies, job descriptions, and engagement content at scale\n\n**His philosophy:** AI shouldn't replace HR people; it should **liberate them** from transactional work so they can focus on what humans do best — empathy, judgment, relationship-building, and strategic thinking.\n\n**The 'test and deploy' approach:**\nHe doesn't wait for vendors to build perfect solutions. He prototypes with available tools, tests with a small group, learns what works, and then scales. Some experiments fail — and he's open about that — but the ones that succeed deliver real value fast.\n\nIf your organization is AI-curious but doesn't know where to start, Kamran is the guy who can show you the first 90-day roadmap.",
+                "If there's one thing that gets Kamran talking at length, it's HR technology. And not in a 'let's buy the latest shiny tool' way — in a 'how do we solve real problems with smart tech?' way.\n\nHe's implemented HRMS platforms at scale (Darwinbox for 7K employees, BambooHR from scratch). He's built Power BI dashboards that give the Chairman real-time workforce visibility. He created an automated deployment model that saved AED 7.2M.\n\nBut what's really exciting him right now is **AI**. He's building tools in-house — testing, failing, learning, deploying. He doesn't believe in waiting for vendors to build the future; he believes in creating it.\n\nHis mantra: **'Reduce transactional, amplify strategic.'** Every minute an HR person spends on a manual process is a minute they're not spending on talent development, culture, or organizational design."
+            ],
+
+            culture: [
+                "Kamran cares deeply about organizational culture — not the 'we have a ping-pong table' kind, but the **'how do we actually treat people here?'** kind.\n\n**Cultures he thrives in:**\n• **Innovation-friendly** — where 'test and deploy' is celebrated, not punished\n• **Data-informed but human-centered** — where metrics serve people, not the other way around\n• **Transparent** — where context is shared broadly and feedback flows in all directions\n• **Development-focused** — where growing people is seen as a business strategy, not a perk\n• **Agile** — where plans adapt based on learning, not ego\n\n**Cultures that drain him:**\n• Micromanagement — he's delivered results reporting to Chairmen; he doesn't need his calendar reviewed\n• Innovation-averse — 'we've always done it this way' is his kryptonite\n• Political — where relationships are transactional and trust is scarce\n• HR-as-cost-center — where the function is seen as overhead, not strategic enabler\n\n**His ideal:** An organization that sees its people as its primary competitive advantage and is willing to invest accordingly."
+            ],
+
+            hobby: [
+                "Kamran prefers to keep his personal life personal — but I'll share what I know! He's deeply curious about **technology beyond HR** — he follows AI developments, tech startups, and digital transformation trends across industries, not just his own.\n\nHe's also a **voracious learner** — always taking courses, reading, or experimenting with new tools. The PG Diploma in HR Digital Transformation wasn't just a credential; it was genuinely driven by curiosity.\n\nAnd if you get him on a call, ask him about his **'failed experiments'** — he keeps a mental (and sometimes actual) list of things he tried that didn't work. He finds more learning in failures than successes. It's a bit quirky, but it's authentically him.\n\nFor anything more personal — family, specific interests outside work — that's best discussed directly with Kamran. I'm his professional wingman, not his biographer!"
+            ],
+
+            reference: [
+                "Kamran is happy to provide references from his previous roles — including former managers, peers, and direct reports. He's maintained strong relationships across his career, including with leaders at Amazon, Landmark Group, and Noon.\n\nHe prefers to share references **after an initial conversation** rather than upfront, simply to respect his referees' time. Once there's mutual interest, he'll connect you with the right people who can speak to specific aspects of his work — whether that's strategic partnership, HR tech implementation, Emiratisation, or team leadership.\n\nWould you like me to connect you two so he can share references directly?"
+            ],
+
+            interview: [
+                "Kamran is **flexible on interview timing** and understands that good recruitment takes coordination. He's based in Dubai (GST timezone) and can accommodate early morning or evening calls to align with different time zones.\n\n**His preference:** A brief **introductory call** (15–20 minutes) to assess mutual fit before committing to a full interview loop. He respects everyone's time — yours and his — and believes in qualifying early.\n\n**What he asks in that first call:**\n• What's the strategic challenge this role is meant to solve?\n• What's the reporting structure and board exposure?\n• Where is the organization on its HR tech journey?\n• What's the Emiratisation mandate (if UAE-based)?\n• What's the timeline for decision-making?\n\nIf the answers align with what he's looking for, he's fully committed to the process. He's not a candidate who ghosts or shops endlessly — when he's in, he's in."
+            ],
+
+            visa: [
+                "Kamran is currently on an **Employment Visa** in the UAE (sponsored by Life Healthcare Group). For his next role, he would require **visa sponsorship** from the new employer.\n\n**The good news:** He's immediately available, so there's no notice period delay. The visa transfer process in the UAE is straightforward and well-established — most HR leaders at his level have navigated this multiple times.\n\n**What he needs from you:** Clarity on whether the role includes visa sponsorship, the expected timeline for the transfer, and any support the organization provides during the transition.\n\nHe's handled visa transitions before — at Amazon, Landmark, and Life Healthcare — so this is familiar territory, not a blocker."
+            ],
+
+            notice: [
+                "Kamran is **immediately available** — no notice period to serve. He can start as soon as the right opportunity is finalized and visa formalities are completed.\n\nThis is actually one of his advantages as a candidate: no three-month wait, no complicated handover negotiations, no counter-offer drama. He's made his decision to move and is ready to commit.\n\nRealistically, factoring in visa transfer and onboarding, he's looking at a **2–4 week timeline** from offer acceptance to Day 1, depending on the organization's processes."
+            ],
+
+            remote: [
+                "Kamran is **open to hybrid work arrangements** but believes that strategic HR leadership requires **presence** — especially in the first 6–12 months.\n\nHis view: You can't build trust with a leadership team, understand culture nuances, or diagnose organizational pain points purely through Zoom. There's no substitute for walking the floors, having coffee with employees, and observing how work actually happens.\n\n**His ideal:** A hybrid model where he's in the office 3–4 days a week for the first year, then flexible based on role demands and team maturity.\n\n**Non-negotiable:** The role must be **based in the UAE** (or GCC, if the right opportunity). He's not considering fully remote roles based outside the region — the regulatory expertise and stakeholder relationships he brings are geographically anchored."
+            ],
+
+            biggest: [
+                "If you ask Kamran this directly, he'll probably pause — not because he doesn't have answers, but because he has *several* and struggles to pick one.\n\n**The business answer:** The **AED 7.2M cost saving** at Life Healthcare. Not because of the number, but because of *how* it was achieved — eliminating a business requirement through smart automation, not eliminating people. That's strategic HR at its best.\n\n**The human answer:** Reducing attrition from **35% to 10% in 8 months**. Because behind every percentage point is a person who chose to stay, who found growth, who felt heard. He keeps a note from a former employee who said his career acceleration program changed their life. That's his real trophy.\n\n**The legacy answer:** The **Adaptive Labor Model at Amazon** being adopted globally. Knowing that something he piloted in India is now running at fulfillment centers worldwide? That's the kind of impact every strategist dreams of.\n\nAsk him which one he's proudest of — I bet he gives you a different answer depending on the day."
+            ],
+
+            challenge: [
+                "Kamran's most challenging professional situation? Probably the **attrition crisis at Life Healthcare** when he joined.\n\n**The context:** 35% annualized attrition. In healthcare, that means patient care continuity breaks, institutional knowledge walks out the door, and replacement costs spiral. The Chairman made it clear: fix this, or nothing else matters.\n\n**What he did:**\n1. **Listened first** — 200+ exit interviews, focus groups, store visits. He didn't assume; he diagnosed.\n2. **Found the patterns** — career stagnation, not compensation, was the #1 driver. People weren't leaving for more money; they were leaving for *any* growth.\n3. **Built the architecture** — three programs: Grow With Life (frontline), Chairman's Club (exceptional performers), Leaders for Life (senior pipeline).\n4. **Measured obsessively** — monthly attrition dashboards, predictive indicators, early warning triggers.\n5. **Stayed patient** — 8 months to get from 35% to 10%. No quick fixes, no gimmicks.\n\n**The lesson:** Most attrition problems aren't HR problems — they're **leadership problems**. People don't leave companies; they leave managers who don't develop them. Fix the development culture, and retention follows."
+            ],
+
+            conflict: [
+                "Kamran's approach to conflict? **'Address it early, address it directly, but always address it with empathy.'**\n\n**His framework:**\n1. **Understand before being understood** — He starts by listening to all sides, separately if needed. What's the real issue beneath the surface complaint?\n2. **Find the shared goal** — Almost always, both parties want the same outcome (business success, team harmony, fair treatment). Reframe around that.\n3. **Be specific about behaviors, not personalities** — 'This decision bypassed the agreed process' works better than 'You don't respect me.'\n4. **Offer a path forward** — Conflict without resolution is just venting. He always proposes concrete next steps.\n5. **Follow up** — The conversation isn't over when people shake hands. He checks in after a week, then a month.\n\n**A real example:** At Landmark, two senior leaders were clashing over manpower allocation between corporate and retail. Kamran didn't pick a side. He brought them together, mapped the business impact of both approaches, and co-created a shared framework. Six months later, they were collaborating on a cross-functional initiative.\n\nHe believes most workplace conflict is **information asymmetry** dressed up as disagreement. Fix the information flow, and the conflict often resolves itself."
+            ],
+
+            prioritize: [
+                "Kamran's prioritization framework is simple: **'Impact first, urgency second, everything else negotiates for time.'**\n\n**His process:**\n1. **Map to business strategy** — Does this directly support a stated business priority? If yes, it gets attention.\n2. **Assess stakeholder impact** — How many people does this affect, and how deeply?\n3. **Evaluate reversibility** — Can we undo this if we're wrong? If yes, decide faster and iterate. If no, slow down and analyze.\n4. **Check his energy** — Brutal honesty: some tasks drain him without delivering value. He delegates or eliminates those.\n5. **Weekly ruthless review** — Every Sunday evening, he reviews his calendar and to-do list. What moved the needle? What was busywork? What should he stop doing?\n\n**His secret weapon:** He blocks **'thinking time'** on his calendar — 2-hour slots with no meetings, no emails, just strategic reflection. It feels indulgent until you realize it's where his best ideas (like the automated deployment model) were born.\n\nHe'll also tell you that saying 'no' is a skill he's still mastering. Every 'yes' to something mediocre is a 'no' to something great."
+            ],
+
+            stress: [
+                "Kamran handles stress through **structure and perspective** — not meditation apps or weekend getaways (though he respects those).\n\n**His approach:**\n• **Compartmentalize** — Work stress stays at work. When he's home, he's present. This took years to master, especially during the Amazon years.\n• **Exercise** — He runs or walks when stuck on a problem. Something about physical movement unlocks mental clarity.\n• **Talk it out** — He has a small circle of trusted peers (former colleagues, mentors) he calls when overwhelmed. External perspective is invaluable.\n• **Reframe** — He asks: 'Will this matter in 6 months?' If no, he reduces the emotional investment. If yes, he focuses on what he can control.\n• **Sleep** — Non-negotiable 7 hours. Everything degrades — judgment, patience, creativity — when he's sleep-deprived.\n\n**His honest admission:** He's not great at asking for help in the moment. He'll power through when he should delegate. It's a work in progress, and he's actively coaching himself to recognize the signs earlier.\n\nThe attrition crisis at Life Healthcare (35% → 10%) was probably his most stressful period. What got him through? The team he built, the data he trusted, and the belief that the work mattered."
+            ],
+
+            years: [
+                "Kamran's 5-year vision is clear: **Group CHRO or equivalent strategic HR leadership role** — ideally in a progressive UAE or GCC organization where he can shape the people agenda at the highest level.\n\n**What that looks like practically:**\n• A seat on the executive committee or board\n• Ownership of the full people strategy — not just HR operations, but organizational design, culture, talent, and technology\n• Building a world-class HR team that outlasts his tenure\n• Leaving behind systems, frameworks, and a leadership pipeline that continue delivering value\n• Being known as the leader who transformed how the organization thinks about its people\n\n**What he's doing now to get there:**\n• SPHRi certification (completed Jan 2025)\n• Building AI capabilities in-house (not waiting for vendors)\n• Developing his successor at Life Healthcare (true leaders build their own replacements)\n• Networking with CHROs and board members across the GCC\n• Continuously learning — currently exploring advanced organizational psychology and AI governance\n\nHe's not in a rush. He wants the *right* CHRO role, not the *next* CHRO role. But he's deliberately building toward it."
+            ],
+
+            motivation: [
+                "What motivates Kamran? It's not titles or money — though he appreciates both. It's **impact and autonomy**.\n\n**What gets him out of bed:**\n• Seeing someone he mentored get promoted\n• Watching a system he designed run smoothly without him\n• Hearing a frontline employee say they feel heard\n• Presenting data to the Board and seeing them *get it*\n• Building something that outlasts his tenure\n\n**What drains him:**\n• Bureaucracy for bureaucracy's sake\n• Decisions made to protect egos rather than serve the business\n• Seeing talent leave because no one invested in their growth\n• HR being treated as a cost center\n\n**His north star:** An organization where people genuinely believe that their best work happens *because* of the culture, not *despite* it. That's what he's building toward — and that's why he's selective about his next move."
+            ],
+
+            difference: [
+                "What makes Kamran different from other senior HR leaders? A few things, actually:\n\n**1. He speaks 'business' fluently**\nMost HR leaders translate HR to business. Kamran *is* bilingual — he thinks in business terms first, then figures out the people lever. When he presents to the Chairman, he doesn't lead with engagement scores; he leads with revenue per employee, replacement cost savings, and productivity metrics.\n\n**2. He's tech-native, not tech-adjacent**\nHe's not 'interested in AI' — he's building it. He's not 'familiar with HRMS' — he's implemented them at scale. He doesn't 'use dashboards' — he builds them. That technical fluency changes the conversation entirely.\n\n**3. He's failed publicly and owned it**\nThe performance management rollout that stumbled at Landmark? He talks about it openly. The political capital he burned on a tech implementation? Lesson learned, shared freely. That vulnerability builds trust faster than any credential.\n\n**4. He's available now**\nNo notice period, no complications, no counter-offer drama. He's made his decision and he's ready. That clarity is rare at his level.\n\n**5. He's cross-sector proven**\nHealthcare, retail, e-commerce, insurance, tech, mining — he's delivered results in all of them. That adaptability means he can enter a new sector and contribute meaningfully in 90 days, not 9 months."
+            ],
+
+            manage: [
+                "Kamran is a **CXO and Board-level HR partner** with experience:\n\n• Reporting directly to **Chairman** at Life Healthcare Group\n• Leading **18 HR professionals** across 7 sub-functions\n• Managing **5,000–10,000 employees** across 600+ stores\n• Driving **enterprise talent philosophy** and succession architectures\n• Shaping **organizational design** for future-ready operations\n• Presenting real-time workforce insights to leadership for decision-making"
+            ],
+
+            default: [
+                "That's a great question — and honestly, it's one of those topics that Kamran can answer much better than I can. I know a lot about his work, his achievements, and what he's looking for next, but some questions deserve a real conversation.\n\n**Here's what I suggest:** Reach out to Kamran directly at **kkamran.khan99@gmail.com** or **+971 54 998 4315**. He's genuinely approachable, does his homework before every call, and believes that the right opportunity starts with the right conversation.\n\nIn the meantime, I can definitely help you with:
+• His current role and achievements
+• What he's looking for next
+• His experience with Emiratisation or HR tech
+• Why those shorter stints happened
+• His availability and logistics
+\nWhat else can I tell you about?",
+
+                "Hmm, that's a thoughtful question — and one where I think Kamran's voice would add way more value than mine. I'm good with facts and figures, but some topics need the human touch.\n\n**My recommendation:** Drop Kamran a line at **kkamran.khan99@gmail.com** or call **+971 54 998 4315**. He's actively looking, immediately available, and always up for a genuine conversation — even if it's just exploratory. No pressure, no pitch, just two professionals figuring out if there's a fit.\n\nWhile you're deciding, feel free to ask me about his track record, his tech expertise, his leadership style, or anything else on his profile. I'm basically an open book!",
+
+                "You know what? You've stumped me — in a good way! That's exactly the kind of question Kamran loves to dig into on a call. He's much better at the nuanced, strategic stuff than I am.\n\n**Want to chat with him directly?** He's at **kkamran.khan99@gmail.com** or **+971 54 998 4315**. And here's a pro tip: mention that AskKamran sent you. He gets a kick out of that. 😄\n\nBut seriously — he's immediately available, actively interviewing, and genuinely enjoys these conversations. Even if this particular role isn't the right fit, he's the kind of person who stays connected and might refer you to someone in his network.\n\nWhat else can I help you with in the meantime?"
+            ]
         },
-        
-        helpTopics: "Here are the topics I can help you with:\n\n🏢 **Current Role** – What is Kamran doing now?\n📈 **Achievements** – Key accomplishments and metrics\n💼 **Experience** – Full career history\n🎯 **Skills** – Core competencies and expertise\n🇦🇪 **Emiratisation** – UAE nationalization expertise\n💻 **HR Technology** – HRMS, analytics, digital transformation\n🎓 **Education** – Certifications and degrees\n📞 **Contact** – How to reach Kamran\n✅ **Availability** – Is he open to opportunities?\n🌍 **Relocation** – Willingness to move\n💰 **Salary** – Compensation expectations\n👥 **Leadership** – Team management experience\n📦 **Amazon** – His work at Amazon\n⭐ **Why Hire** – What makes him unique?\n\nJust ask naturally — I understand context!"
+
+        helpTopics: "Here are the topics I can help you with:\n\n🏢 **Current Role** — What is Kamran doing now?\n📈 **Achievements** — Key accomplishments and metrics\n💼 **Experience** — Full career history\n🎯 **Skills** — Core competencies and expertise\n🇦🇪 **Emiratisation** — UAE nationalization expertise\n💻 **HR Technology** — HRMS, analytics, digital transformation\n🎓 **Education** — Certifications and degrees\n📞 **Contact** — How to reach Kamran\n✅ **Availability** — Is he open to opportunities?\n🌍 **Relocation** — Willingness to move\n💰 **Salary** — Compensation expectations\n👥 **Leadership** — Team management experience\n📦 **Amazon** — His work at Amazon\n⭐ **Why Hire** — What makes him unique?\n🔴 **Short Stints** — Addressing job-hopping concerns\n❌ **Failures** — What went wrong and what he learned\n🤖 **AI in HR** — His tech-forward approach\n\nJust ask naturally — I understand context!"
     };
 
-    let AskKamranOpen = false;
+    // ===================== CHAT FUNCTIONS =====================
+
+    let askKamranOpen = false;
     let hasGreeted = false;
+    let messageHistory = [];
 
     function toggleAskKamran() {
-        const chat = document.getElementById('AskKamran-chat');
-        const icon = document.getElementById('AskKamran-icon');
-        
-        AskKamranOpen = !AskKamranOpen;
-        
-        if (AskKamranOpen) {
+        const chat = document.getElementById('askkamran-chat');
+        const icon = document.getElementById('askkamran-icon');
+        const dot = document.getElementById('notification-dot');
+
+        askKamranOpen = !askKamranOpen;
+
+        if (askKamranOpen) {
             chat.classList.remove('hidden');
-            // Small delay to allow display:block to apply before opacity transition
             setTimeout(() => {
                 chat.classList.remove('scale-95', 'opacity-0');
                 chat.classList.add('scale-100', 'opacity-100');
             }, 10);
             icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>';
-            
+            dot.style.display = 'none';
+
             if (!hasGreeted) {
                 setTimeout(() => {
-                    const greeting = AskKamranKnowledge.greetings[Math.floor(Math.random() * AskKamranKnowledge.greetings.length)];
+                    const greeting = askKamranRepo.greetings[Math.floor(Math.random() * askKamranRepo.greetings.length)];
                     addAskKamranMessage(greeting, 'bot');
                     hasGreeted = true;
-                }, 600);
+                }, 800);
             }
         } else {
             chat.classList.remove('scale-100', 'opacity-100');
@@ -948,11 +1075,28 @@
         }
     }
 
+    function minimizeChat() {
+        toggleAskKamran();
+    }
+
+    function closeChat() {
+        const chat = document.getElementById('askkamran-chat');
+        const icon = document.getElementById('askkamran-icon');
+
+        chat.classList.remove('scale-100', 'opacity-100');
+        chat.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            chat.classList.add('hidden');
+        }, 300);
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>';
+        askKamranOpen = false;
+    }
+
     function addAskKamranMessage(text, sender) {
-        const container = document.getElementById('AskKamran-messages');
+        const container = document.getElementById('askkamran-messages');
         const div = document.createElement('div');
         div.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-start'} message-anim`;
-        
+
         const isUser = sender === 'user';
         const bgColor = isUser ? 'bg-blue-600 text-white' : 'bg-white text-slate-700 border border-slate-200';
         const avatar = isUser ? '' : `
@@ -960,23 +1104,28 @@
                 <span class="text-white text-xs font-bold">K</span>
             </div>
         `;
-        
-        // Convert markdown-style bold to HTML
-        const formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
-        
+
+        // Convert markdown-style bold to HTML and handle newlines
+        const formattedText = text
+            .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>')
+            .replace(/\n/g, '<br>');
+
         div.innerHTML = `
             ${avatar}
-            <div class="${bgColor} rounded-2xl px-4 py-3 max-w-[80%] text-sm leading-relaxed shadow-sm">
+            <div class="${bgColor} rounded-2xl px-4 py-3 max-w-[85%] text-sm leading-relaxed shadow-sm">
                 ${formattedText}
             </div>
         `;
-        
+
         container.appendChild(div);
         container.scrollTop = container.scrollHeight;
+
+        // Store in history
+        messageHistory.push({ sender, text });
     }
 
     function showTypingIndicator() {
-        const container = document.getElementById('AskKamran-messages');
+        const container = document.getElementById('askkamran-messages');
         const div = document.createElement('div');
         div.id = 'typing-indicator';
         div.className = 'flex justify-start message-anim';
@@ -1003,58 +1152,91 @@
 
     function findBestResponse(input) {
         const lower = input.toLowerCase();
-        
+
         // Check for help
-        if (lower.includes('help') || lower.includes('what can you') || lower.includes('topics')) {
-            return AskKamranKnowledge.helpTopics;
+        if (lower.includes('help') || lower.includes('what can you') || lower.includes('topics') || lower.includes('what do you know')) {
+            return askKamranRepo.helpTopics;
         }
-        
+
         // Check all response keys
-        for (const [key, response] of Object.entries(AskKamranKnowledge.responses)) {
+        for (const [key, responseArray] of Object.entries(askKamranRepo.responses)) {
             if (lower.includes(key)) {
-                return response;
+                // Return random variant from the array
+                return responseArray[Math.floor(Math.random() * responseArray.length)];
             }
         }
-        
-        // Check for partial matches
-        const keywords = {
-            'current': ['now', 'today', 'present', 'life healthcare'],
-            'achievement': ['save', 'saving', 'cost', 'attrition', 'compliance', 'reduce', 'improvement', 'metric', 'kpi', 'result'],
-            'experience': ['career', 'history', 'worked', 'company', 'previous', 'past', 'background'],
-            'skill': ['competency', 'expertise', 'capable', 'know', 'can do', 'strength'],
-            'emiratisation': ['emirati', 'nationalization', 'uae vision', 'mohre', 'qatari', 'saudi'],
-            'tech': ['system', 'software', 'digital', 'automation', 'power bi', 'darwinbox', 'bamboo', 'hrms'],
-            'education': ['study', 'university', 'certified', 'sphri', 'mba', 'diploma', 'qualification'],
-            'contact': ['reach', 'connect', 'speak', 'talk', 'message', 'linkedin'],
-            'available': ['looking', 'searching', 'job hunt', 'interested', 'opportunity', 'hire'],
-            'relocation': ['move', 'transfer', 'abroad', 'gcc', 'ksa', 'bahrain', 'kuwait', 'oman'],
-            'salary': ['pay', 'compensation', 'package', 'expectation', 'remuneration', 'budget'],
-            'leadership': ['lead', 'manager', 'team size', 'report', 'subordinate', 'headcount'],
-            'amazon': ['fulfillment', 'adaptive labor', 'jeff bezos', 'e-commerce giant'],
-            'why': ['unique', 'different', 'special', 'stand out', 'value', 'asset']
+
+        // Check for partial matches with synonyms
+        const synonyms = {
+            about: ['yourself', 'introduce', 'who are you', 'who is kamran', 'summary', 'overview', 'pitch'],
+            looking: ['next', 'search', 'want', 'seeking', 'future', 'goal', 'aspiration', 'move', 'opportunity'],
+            current: ['now', 'today', 'present', 'life healthcare', 'doing now', 'where do you work'],
+            achievement: ['achievement', 'accomplishment', 'save', 'saving', 'cost', 'attrition', 'compliance', 'reduce', 'improvement', 'metric', 'kpi', 'result', 'impact', 'deliver', 'win'],
+            experience: ['career', 'history', 'worked', 'company', 'previous', 'past', 'background', 'journey', 'cv', 'resume'],
+            skill: ['competency', 'expertise', 'capable', 'know', 'can do', 'strength', 'good at', 'excel'],
+            emiratisation: ['emirati', 'nationalization', 'uae vision', 'mohre', 'qatari', 'saudi', 'nafis'],
+            technology: ['system', 'software', 'digital', 'automation', 'power bi', 'darwinbox', 'bamboo', 'hrms', 'tech', 'ai', 'tool', 'platform'],
+            education: ['study', 'university', 'certified', 'sphri', 'mba', 'diploma', 'qualification', 'degree', 'learn'],
+            contact: ['reach', 'connect', 'speak', 'talk', 'message', 'linkedin', 'email', 'phone', 'call'],
+            available: ['looking', 'searching', 'job hunt', 'interested', 'opportunity', 'hire', 'join', 'start', 'when'],
+            relocation: ['move', 'transfer', 'abroad', 'gcc', 'ksa', 'bahrain', 'kuwait', 'oman', 'qatar', 'relocate'],
+            salary: ['pay', 'compensation', 'package', 'expectation', 'remuneration', 'budget', 'money', 'earn', 'ctc'],
+            stint: ['short', 'hopping', 'jump', 'tenure', 'longevity', 'commitment', 'stay', 'why leave', 'why did you'],
+            why: ['unique', 'different', 'special', 'stand out', 'value', 'asset', 'best', 'better', 'choose', 'pick'],
+            amazon: ['fulfillment', 'adaptive labor', 'jeff bezos', 'e-commerce giant', 'prime'],
+            noon: ['e-commerce', 'darwinbox', 'shared services'],
+            landmark: ['home centre', 'retail', 'gcc operations', 'landmark'],
+            leadership: ['lead', 'manager', 'team size', 'report', 'subordinate', 'headcount', 'manage', 'style'],
+            failure: ['fail', 'mistake', 'wrong', 'learn', 'regret', 'lesson', 'bad'],
+            weakness: ['weak', 'improve', 'development area', 'not good', 'struggle'],
+            team: ['team', 'people', 'reporting', 'direct reports', 'org chart'],
+            wrong: ['what happened', 'why leave', 'why did', 'reason for', 'cause'],
+            industry: ['sector', 'domain', 'field', 'healthcare', 'retail', 'insurance', 'mining'],
+            ai: ['artificial intelligence', 'machine learning', 'ml', 'chatbot', 'predictive', 'generative'],
+            culture: ['environment', 'values', 'fit', 'vibe', 'atmosphere', 'workplace'],
+            hobby: ['personal', 'outside', 'weekend', 'interest', 'passion', 'hobby', 'fun', 'family'],
+            reference: ['refer', 'recommendation', 'testimonial', 'former manager', 'past boss'],
+            interview: ['schedule', 'meet', 'chat', 'call', 'zoom', 'teams', 'availability'],
+            visa: ['sponsorship', 'transfer', 'employment visa', 'residence', 'work permit'],
+            notice: ['notice period', 'handover', 'transition', 'how soon', 'timeline'],
+            remote: ['work from home', 'wfh', 'hybrid', 'flexible', 'office', 'virtual'],
+            biggest: ['proudest', 'favorite', 'most proud', 'highlight', 'best work'],
+            challenge: ['difficult', 'tough', 'hard', 'crisis', 'problem', 'obstacle', 'adversity'],
+            conflict: ['disagreement', 'fight', 'argue', 'dispute', 'resolution', 'mediate'],
+            prioritize: ['priority', 'focus', 'important', 'urgent', 'time management', 'delegate'],
+            stress: ['pressure', 'burnout', 'overwhelm', 'cope', 'mental health', 'balance'],
+            years: ['5 year', 'future', 'vision', 'where do you see', 'chro', 'aspiration', 'grow'],
+            motivation: ['drive', 'inspire', 'passion', 'why hr', 'why this', 'energy', 'excited'],
+            difference: ['compare', 'vs', 'versus', 'other candidate', 'competition', 'edge'],
+            manage: ['scope', 'responsibility', 'accountability', 'authority', 'decision']
         };
-        
-        for (const [key, synonyms] of Object.entries(keywords)) {
-            if (synonyms.some(s => lower.includes(s))) {
-                return AskKamranKnowledge.responses[key];
+
+        for (const [key, words] of Object.entries(synonyms)) {
+            if (words.some(w => lower.includes(w))) {
+                const responseArray = askKamranRepo.responses[key];
+                if (responseArray) {
+                    return responseArray[Math.floor(Math.random() * responseArray.length)];
+                }
             }
         }
-        
-        return AskKamranKnowledge.responses.default;
+
+        // Default fallback with contact info
+        const defaults = askKamranRepo.responses.default;
+        return defaults[Math.floor(Math.random() * defaults.length)];
     }
 
     function sendAskKamranMessage() {
-        const input = document.getElementById('AskKamran-input');
+        const input = document.getElementById('askkamran-input');
         const text = input.value.trim();
         if (!text) return;
-        
+
         addAskKamranMessage(text, 'user');
         input.value = '';
-        
+
         showTypingIndicator();
-        
-        // Simulate thinking time (1-2 seconds)
-        const delay = 800 + Math.random() * 800;
+
+        // Simulate thinking time (1.2-2.5 seconds)
+        const delay = 1200 + Math.random() * 1300;
         setTimeout(() => {
             removeTypingIndicator();
             const response = findBestResponse(text);
@@ -1063,16 +1245,25 @@
     }
 
     function sendQuickQuestion(question) {
-        document.getElementById('AskKamran-input').value = question;
+        document.getElementById('askkamran-input').value = question;
         sendAskKamranMessage();
     }
 
-    // Auto-open after 2 seconds
+    // Auto-open after 2 seconds with notification dot
     setTimeout(() => {
-        if (!AskKamranOpen) {
+        if (!askKamranOpen) {
             toggleAskKamran();
         }
     }, 2000);
+
+    // Hide notification dot after first interaction
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('#askkamran-toggle')) {
+            const dot = document.getElementById('notification-dot');
+            if (dot) dot.style.display = 'none';
+        }
+    });
 </script>
+
 </body>
 </html>

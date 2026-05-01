@@ -1533,15 +1533,13 @@
     }
 
     // ═════════════════════════════════════════════════════════════════
-    // GEMINI AI INTEGRATION
-    // API key restricted to kamran-hr.github.io via Google Cloud Console
-    // HTTP-referrer restriction. Free tier: 1,500 requests/day.
+    // GEMINI AI INTEGRATION (via Cloudflare Worker proxy)
+    // The Gemini API key is stored as a Secret on the Cloudflare Worker —
+    // it never appears in this client-side code, so it can't be leaked.
+    // Worker handles CORS and origin allowlisting (kamran-hr.github.io only).
+    // Free tier: 100,000 Worker requests/day + 1,500 Gemini requests/day.
     // ═════════════════════════════════════════════════════════════════
-    const GEMINI_API_KEY = 'AIzaSyBY8WQ3ztnIAgliE1wnY2lnGzNC_tTHHSI';
-    // Using 2.0-flash (no thinking tokens, predictable token budget) for stable responses.
-    // Free tier: 15 RPM, 1,500 RPD. Switch to 'gemini-2.5-flash-lite' or 'gemini-2.5-flash' if smarter answers needed.
-    const GEMINI_MODEL   = 'gemini-2.0-flash';
-    const GEMINI_URL     = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+    const WORKER_URL = 'https://askkamran-proxy.kkamran-khan99.workers.dev';
 
     const SYSTEM_PROMPT = `You are AskKamran, an AI assistant on Kamran Khan's CV website. You answer recruiter and hiring-manager questions about Kamran's career, achievements, and what he's looking for next.
 
@@ -1664,7 +1662,7 @@ Email: kkamran.khan99@gmail.com | Phone: +971 54 998 4315 | LinkedIn: linkedin.c
             }
         };
 
-        const response = await fetch(GEMINI_URL, {
+        const response = await fetch(WORKER_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)
@@ -1672,7 +1670,7 @@ Email: kkamran.khan99@gmail.com | Phone: +971 54 998 4315 | LinkedIn: linkedin.c
 
         if (!response.ok) {
             const errText = await response.text();
-            throw new Error('Gemini ' + response.status + ': ' + errText);
+            throw new Error('AskKamran proxy ' + response.status + ': ' + errText);
         }
 
         const data = await response.json();

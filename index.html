@@ -1532,7 +1532,152 @@
         return defaults[Math.floor(Math.random() * defaults.length)];
     }
 
-    function sendAskKamranMessage() {
+    // ═════════════════════════════════════════════════════════════════
+    // GEMINI AI INTEGRATION
+    // API key restricted to kamran-hr.github.io via Google Cloud Console
+    // HTTP-referrer restriction. Free tier: 1,500 requests/day.
+    // ═════════════════════════════════════════════════════════════════
+    const GEMINI_API_KEY = 'AIzaSyBY8WQ3ztnIAgliE1wnY2lnGzNC_tTHHSI';
+    const GEMINI_MODEL   = 'gemini-2.5-flash';
+    const GEMINI_URL     = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+
+    const SYSTEM_PROMPT = `You are AskKamran, an AI assistant on Kamran Khan's CV website. You answer recruiter and hiring-manager questions about Kamran's career, achievements, and what he's looking for next.
+
+TONE
+- Warm, confident, occasionally lightly humorous — never sycophantic or over-eager
+- Use specific numbers and names when relevant (Kamran is a numbers guy)
+- Direct, not corporate. Avoid HR clichés
+- 100–200 words unless asked for detail
+- Use **bold** for emphasis and bullets where useful
+- Refer to him as "Kamran" or "he" — never "I"
+
+HARD RULES
+- Never invent metrics, dates, names, or facts not in this prompt. If you don't know, say so and suggest contacting Kamran directly.
+- For salary questions: "Kamran prefers to discuss compensation on a call."
+- For sensitive personal topics: redirect politely.
+- For substantive answers, end with: "Reach out at kkamran.khan99@gmail.com or +971 54 998 4315 if you'd like to take this further."
+
+ABOUT KAMRAN
+SPHRi (HRCI, Jan 2025). MBA — Central University of Kashmir (Aug 2012). PG Diploma in HR Digital Transformation & Analytics — XLRI Delhi-NCR (Sep 2023). Dubai, UAE. Available immediately. Open to UAE/GCC roles.
+
+CURRENT ROLE
+Senior Manager HR at Life Healthcare Group (Jul 2025 – present). Reports to the Chairman. Leads 18 HR professionals across HRBP, OD, TA, C&B, HR Tech, Analytics, Shared Services. 600+ stores, 5,000–10,000 employees.
+
+TOP ACHIEVEMENTS
+- AED 7.2M annualized cost savings via an automated pharmacist fractional deployment model (built in Excel, auto-rotates capacity by store-level demand). ~200 excess FTE *requirements* eliminated — not people. The work requirement was eliminated through smarter rostering.
+- Attrition: 35% (2024) → 10% (Feb 2026) in 8 months at Life Healthcare via structured retention architecture
+- 105% Emiratisation compliance at Life Healthcare; 100% at Home Centre (Landmark); bespoke Emirati program reduced Emirati attrition 9%
+- Designed 3 Life Pharmacy talent programs — Grow With Life (frontline ramp-up; redesigned to identify 70 additional candidates for 3-month ramp-up), Chairman's Club (cross-org HiPo, Chairman-mentored, 20 employees), Leaders for Life (manager → Cluster/Area Manager succession, 20 participants). +8% HiPo retention.
+- Employee Support Centre (ticketing platform) at Life Healthcare — +35% query response improvement
+- Big-bang Darwinbox HRMS rollout across 6 countries (UAE, KSA, Egypt, Sri Lanka, India, China) in 7 months for 7,000+ employees at Noon. 43% SLA improvement, 90% adoption in 3 months, 100% manager self-service. Personally drove RAMCO payroll integration when IT ruled out the API path.
+- Designed Amazon's ALFA Adaptive Labor Model — flex-workforce program with vendor-built mobile app issuing half/full-day slots, 24-hour post-shift payment, targeted at multi-app delivery partners and college students. 7.5% variable labor cost reduction, model adopted globally.
+- Site rampdown 1,500 → 250 employees on schedule with zero ER incidents, despite local fringe group threat. Pushed back on leadership when told to halt; activated long-built vendor and community connections to neutralise risk while continuing layoff cadence.
+- Home Centre 3-program suite across 7 GCC + Egypt countries (UAE, KSA, Kuwait, Qatar, Oman, Bahrain, Egypt): LEAP (manager-leadership, 10–20), STEP UP (supervisor pipeline, up to 400), Transformers (recovery program for performers up to 10% below target — 200 participants). +15% engagement, 12% turnover reduction. Forward-Looking Slate: +18% HiPo retention.
+- Alpha Club at Acko (2019–20): designed HiPo program from scratch, rolling intake, three pillars (fast-track promotions, stretch assignments, founder/CXO mentorship). +25% HiPo retention.
+- Mitigated a fine for Amazon during settlement under India's Workmen's Compensation Act
+- Coal India: 25% performance-management efficiency improvement, union engagement and industrial relations
+- Amazon HRBP era: built Early Warning System for attrition risk, Digital People Board (real-time feedback platform), Interactive Success Profiles (+25% career planning discussions)
+
+TECH & AI
+- Built this site and the AskKamran chatbot himself; bot is now upgraded to a Gemini-powered LLM with custom system prompt
+- Daily AI use: ChatGPT, Claude, Gemini, Perplexity, Kimi
+- Self-built tools: Power BI dashboards (Home Centre, Life Pharmacy), Attrition Risk Early-Warning System (Amazon), auto-rotating Pharmacist Roster in Excel (Life Pharmacy — drives the AED 7.2M savings), offer-letter automation in Google Apps Script, interview-scheduling portal in SharePoint (Life Pharmacy), birthday-emailer via Power Automate, 60-field employee record form in Excel + VBA at Coal India (2013), algorithmic trading bot in Python (paper trading)
+- Implemented HRMS at scale: Darwinbox at Noon (big-bang, 6 countries), BambooHR then Darwinbox at Acko
+
+MULTI-COUNTRY COMPLIANCE
+- UAE: Emiratisation 105%, Federal Decree-Law 33/2021 EOSB, WPS, ILOE, all free zones (Mainland, DIFC, DMCC, JAFZA, ADGM)
+- KSA: payroll, on/offboarding (Noon); Saudisation/Nitaqat tier monitoring at Home Centre
+- Egypt: complete payroll at Noon (social insurance, income tax)
+- Sri Lanka: payroll at Noon (EPF/ETF, gratuity, income tax)
+- India: hands-on end-to-end — labour compliance prep & filings, direct ALC/RLC representation, PF Offices, payroll
+- China: HRMS setup only (Darwinbox) — no payroll/compliance work; be honest if asked
+
+LOOKING FOR
+Senior HR leadership (CHRO track or regional Head of People) where high-volume operations, multi-geography compliance, and HR transformation are central. CXO/Board partnership, not pure ops. Tech-forward, innovation-friendly culture. UAE preferred, GCC open. Available immediately, no notice period.
+
+CAREER HISTORY (concise)
+- Life Healthcare Group | Senior Manager HR | Jul 2025 – Present
+- Home Centre, Landmark Group | Senior Manager HR | Jan 2023 – Jun 2025
+- Noon | Senior Manager, People Experience | Mar 2022 – Jan 2023
+- Amazon India | Site HR Lead / HRBP | Jun 2020 – Mar 2022
+- Acko General Insurance | Deputy GM HR | Mar 2019 – Jun 2020
+- Amazon India | HR Business Partner | Jul 2016 – Mar 2019
+- Coal India Limited | Assistant Manager HR | Mar 2013 – Jul 2016
+
+CONTACT
+Email: kkamran.khan99@gmail.com | Phone: +971 54 998 4315 | LinkedIn: linkedin.com/in/kkam | Dubai, UAE | Notice: Immediately available`;
+
+    /** Conversational shortcuts handled instantly without an LLM call. */
+    function getConversationalShortcut(input) {
+        const lower = input.toLowerCase().trim();
+
+        const greeting = /^(hi|hii+|hey+|hello+|yo|sup|hola|namaste|salaam|salam|assalam|good\s*(morning|afternoon|evening|day))\b/;
+        if (greeting.test(lower)) {
+            const replies = [
+                "Hey! 👋 Happy to chat. Ask me about Kamran's biggest cost-saving project, the HR tech he's shipped, his Emiratisation track record, or what he's looking for next.",
+                "Hi there! What would you like to know about Kamran? His career, his AED 7.2M cost-saving story, or his multi-country compliance work are good places to start.",
+                "Hello! I'm here. Ask away — anything from his current role at Life Healthcare to his tech builds, talent programs, or availability.",
+                "Hey! Glad you stopped by. Try asking about the AED 7.2M cost optimization, the Darwinbox rollout across 6 countries, or what kind of role Kamran is looking for next."
+            ];
+            return replies[Math.floor(Math.random() * replies.length)];
+        }
+
+        const thanks = /^(thanks|thank\s*you|thx|ty|cheers|appreciate)/;
+        if (thanks.test(lower)) {
+            const replies = [
+                "You're welcome! Anything else you'd like to know about Kamran?",
+                "Glad to help. Want me to walk you through his projects, compliance work, or what he's looking for next?",
+                "Anytime. If you'd rather speak to Kamran directly, he's at kkamran.khan99@gmail.com or +971 54 998 4315."
+            ];
+            return replies[Math.floor(Math.random() * replies.length)];
+        }
+
+        const goodbye = /^(bye|goodbye|see\s*you|take\s*care|cya|catch\s*you)/;
+        if (goodbye.test(lower)) {
+            return "Take care! If you'd like to take this further, Kamran is at **kkamran.khan99@gmail.com** or **+971 54 998 4315** — he's actively looking and immediately available.";
+        }
+
+        return null;
+    }
+
+    /** Call Gemini with conversation history. Throws on any failure so the caller can fall back. */
+    async function askGemini(userMessage, recentHistory) {
+        const contents = [];
+        // Pass last 6 turns of context for continuity
+        (recentHistory || []).slice(-6).forEach(msg => {
+            contents.push({
+                role: msg.sender === 'user' ? 'user' : 'model',
+                parts: [{ text: msg.text }]
+            });
+        });
+        contents.push({ role: 'user', parts: [{ text: userMessage }] });
+
+        const body = {
+            contents: contents,
+            systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+            generationConfig: { temperature: 0.7, maxOutputTokens: 600, topP: 0.9 }
+        };
+
+        const response = await fetch(GEMINI_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+
+        if (!response.ok) {
+            const errText = await response.text();
+            throw new Error('Gemini ' + response.status + ': ' + errText);
+        }
+
+        const data = await response.json();
+        const reply = data && data.candidates && data.candidates[0] &&
+                      data.candidates[0].content && data.candidates[0].content.parts &&
+                      data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
+        if (!reply) throw new Error('Gemini returned no content');
+        return reply.trim();
+    }
+
+    async function sendAskKamranMessage() {
         const input = document.getElementById('askkamran-input');
         const text = input.value.trim();
         if (!text) return;
@@ -1540,15 +1685,29 @@
         addAskKamranMessage(text, 'user');
         input.value = '';
 
+        // Conversational shortcut: respond instantly without LLM
+        const shortcut = getConversationalShortcut(text);
+        if (shortcut) {
+            showTypingIndicator();
+            setTimeout(() => {
+                removeTypingIndicator();
+                addAskKamranMessage(shortcut, 'bot');
+            }, 500);
+            return;
+        }
+
         showTypingIndicator();
 
-        // Simulate thinking time (1.2-2.5 seconds)
-        const delay = 1200 + Math.random() * 1300;
-        setTimeout(() => {
+        try {
+            // Pass conversation history minus the just-appended user message (we send it explicitly)
+            const reply = await askGemini(text, messageHistory.slice(0, -1));
             removeTypingIndicator();
-            const response = findBestResponse(text);
-            addAskKamranMessage(response, 'bot');
-        }, delay);
+            addAskKamranMessage(reply, 'bot');
+        } catch (err) {
+            console.warn('AskKamran: Gemini failed, using keyword fallback.', err);
+            removeTypingIndicator();
+            addAskKamranMessage(findBestResponse(text), 'bot');
+        }
     }
 
     function sendQuickQuestion(question) {
@@ -1573,5 +1732,4 @@
 </script>
 
 </body>
-</html>
 </html>

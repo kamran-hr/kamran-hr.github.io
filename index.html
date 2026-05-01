@@ -615,20 +615,20 @@
                     <div class="text-xs text-slate-500 pt-3 border-t border-slate-100"><strong>Tools:</strong> WPS · Darwinbox · RAMCO · MOHRE/MOL portals · ALC/RLC representation · PF e-filings</div>
                 </article>
 
-                <!-- Card 7: Life Pharmacy 4-Program Architecture -->
+                <!-- Card 7: Life Pharmacy 3-Program Architecture -->
                 <article class="project-card bg-white rounded-2xl p-6 md:p-7 shadow-sm card-hover border border-slate-100" data-pillar="talent">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs font-bold uppercase tracking-wide text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-100">Talent Management</span>
                         <span class="text-xs text-slate-500 font-medium">2025–present</span>
                     </div>
-                    <h4 class="text-xl font-bold text-primary mb-1">Life Pharmacy 4-Program Talent Architecture</h4>
+                    <h4 class="text-xl font-bold text-primary mb-1">Life Pharmacy 3-Program Talent Architecture</h4>
                     <p class="text-xs text-slate-500 mb-4">Life Healthcare Group · UAE · 5,000+ employees</p>
-                    <p class="text-sm text-slate-600 mb-4 leading-relaxed">Designed and operationally owned a portfolio of <strong>four concurrent talent programs</strong> — frontline ramp-up, mid-management succession, retail-ops high-potentials, and chairman-sponsored future leaders.</p>
+                    <p class="text-sm text-slate-600 mb-4 leading-relaxed">Designed and operationally owned a portfolio of <strong>three concurrent talent programs</strong> — frontline ramp-up, mid-management succession, and chairman-sponsored future leaders.</p>
                     <ul class="text-sm text-slate-700 space-y-1.5 mb-4">
-                        <li class="flex items-start gap-2"><span class="text-amber-600 mt-0.5">▸</span><span><strong>Grow With Life</strong> (redesigned): 250 applicants → 50 shortlists + <strong>70 ramp-up candidates</strong> (3 mo vs 6) the previous process would have lost</span></li>
-                        <li class="flex items-start gap-2"><span class="text-amber-600 mt-0.5">▸</span><span><strong>Leaders for Life</strong>: 20-person succession program developing managers into Cluster/Area Manager roles</span></li>
-                        <li class="flex items-start gap-2"><span class="text-amber-600 mt-0.5">▸</span><span><strong>Life Delta Force</strong>: 15-person retail-ops high-potential cohort</span></li>
-                        <li class="flex items-start gap-2"><span class="text-amber-600 mt-0.5">▸</span><span><strong>Chairman's Club</strong>: 20 employees mentored directly by the Chairman, fast-track promotion, C-suite exposure</span></li>
+                        <li class="flex items-start gap-2"><span class="text-amber-600 mt-0.5">▸</span><span><strong>Grow With Life</strong> (redesigned, frontline): 250 applicants → 50 shortlists + <strong>70 ramp-up candidates</strong> (3 mo vs 6) the previous process would have lost</span></li>
+                        <li class="flex items-start gap-2"><span class="text-amber-600 mt-0.5">▸</span><span><strong>Leaders for Life</strong>: succession program developing managers into Cluster/Area Manager roles</span></li>
+                        <li class="flex items-start gap-2"><span class="text-amber-600 mt-0.5">▸</span><span><strong>Chairman's Club</strong>: exceptional performers mentored directly by the Chairman — fast-track promotion and C-suite exposure</span></li>
+                        <li class="flex items-start gap-2"><span class="text-green-600 mt-0.5">✓</span><span><strong>+8%</strong> high-potential talent retention across the portfolio</span></li>
                     </ul>
                     <div class="text-xs text-slate-500 pt-3 border-t border-slate-100"><strong>Tools:</strong> Cohort design · Feedback-loop assessment · Succession pipelining · Chairman/C-suite sponsorship</div>
                 </article>
@@ -1655,7 +1655,14 @@ Email: kkamran.khan99@gmail.com | Phone: +971 54 998 4315 | LinkedIn: linkedin.c
         const body = {
             contents: contents,
             systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-            generationConfig: { temperature: 0.7, maxOutputTokens: 600, topP: 0.9 }
+            generationConfig: {
+                temperature: 0.7,
+                maxOutputTokens: 800,
+                topP: 0.9,
+                // Disable Gemini 2.5's internal "thinking" — it eats the token budget
+                // before producing visible output, causing truncated answers.
+                thinkingConfig: { thinkingBudget: 0 }
+            }
         };
 
         const response = await fetch(GEMINI_URL, {
